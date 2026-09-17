@@ -1,0 +1,72 @@
+name: Import and publish Korean edition
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and import the validated source archive
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import hashlib, zipfile
+          archive = Path('korean-llm-model-kbs-source.zip')
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == 'dd686db3eaa430ee55aee59e6926ab92e0067a585358d3165102a8fab4049664'
+          root = Path.cwd().resolve()
+          with zipfile.ZipFile(archive) as bundle:
+              for item in bundle.infolist():
+                  if item.is_dir():
+                      continue
+                  parts = PurePosixPath(item.filename).parts
+                  assert parts[0] == 'korean-llm-model-kbs'
+                  relative = PurePosixPath(*parts[1:])
+                  assert not relative.is_absolute() and '..' not in relative.parts
+                  assert '.git' not in relative.parts
+                  if str(relative).startswith('.github/workflows/'):
+                      continue
+                  target = (root / str(relative)).resolve()
+                  assert target.is_relative_to(root)
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(bundle.read(item))
+          Path('pages/public/CNAME').unlink(missing_ok=True)
+          archive.unlink()
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Validate and build the Korean website
+        working-directory: pages
+        run: |
+          npm ci
+          npm run typecheck
+          npm test
+          npm run build
+      - name: Publish Korean edition source
+        run: |
+          git config user.name speddiikga-code
+          git config user.email 313185744+speddiikga-code@users.noreply.github.com
+          git add --all
+          git add --renormalize .
+          git diff --cached --check
+          git commit -m "Publish Korean-first KBS edition"
+          git push origin HEAD:main
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages/dist
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
