@@ -24,7 +24,7 @@ jobs:
           from pathlib import Path, PurePosixPath
           import hashlib, zipfile
           archive = Path('korean-llm-model-kbs-source.zip')
-          assert hashlib.sha256(archive.read_bytes()).hexdigest() == 'dd686db3eaa430ee55aee59e6926ab92e0067a585358d3165102a8fab4049664'
+          assert hashlib.sha256(archive.read_bytes()).hexdigest() == '910ac3df4e1be1b98f1fd116d2be03249b94baab39171ab2aaf2c1e4fef9e606'
           root = Path.cwd().resolve()
           with zipfile.ZipFile(archive) as bundle:
               for item in bundle.infolist():
