@@ -35,11 +35,13 @@ describe('App', () => {
   beforeEach(() => {
     installLocalStorageMock();
     window.localStorage.clear();
+    window.localStorage.setItem('kbs-lang', 'en');
     window.scrollTo = () => {};
   });
 
   afterEach(() => {
     window.localStorage.clear();
+    window.localStorage.setItem('kbs-lang', 'en');
   });
 
   it('renders the not-found page for an unmatched URL', () => {

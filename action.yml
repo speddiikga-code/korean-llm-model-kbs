@@ -1,6 +1,6 @@
-name: OpenCodeReview PR Review
+name: korean llm model kbs PR Review
 description: >-
-  AI-powered GitHub PR review with inline comments, sticky summary, and
+  Korean AI-powered GitHub PR review with inline comments, sticky summary, and
   incremental non-destructive posting.
 author: alibaba
 branding:
@@ -56,9 +56,9 @@ inputs:
   language:
     description: >-
       Review output language, written via `ocr config set language`
-      (e.g. English, Chinese). No env var exists for this.
+      (e.g. Korean, English, Chinese). No env var exists for this.
     required: false
-    default: 'English'
+    default: 'Korean'
   llm_timeout:
     description: LLM request timeout in seconds (mapped to env OCR_LLM_TIMEOUT).
     required: false

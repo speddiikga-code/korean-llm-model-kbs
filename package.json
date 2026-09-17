@@ -1,7 +1,7 @@
 {
-  "name": "@alibaba-group/open-code-review",
-  "version": "0.0.0",
-  "description": "OpenCodeReview CLI — AI-powered code review tool",
+  "name": "korean-llm-model-kbs",
+  "version": "0.1.0",
+  "description": "Korean-first edition of Open Code Review",
   "bin": {
     "ocr": "bin/ocr.js"
   },
@@ -14,32 +14,21 @@
     "imgs/"
   ],
   "scripts": {
-    "postinstall": "node scripts/install.js",
     "test:github-actions": "node scripts/github-actions/post-review-comments.test.js && node scripts/github-actions/check-translation-sync.test.js && node scripts/github-actions/action-contract.test.js && node scripts/github-actions/check-plugin-contract.test.js",
     "test:update": "node scripts/version.test.js",
     "test:launcher": "node bin/ocr.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/open-code-review.git"
-  },
-  "publishConfig": {
-    "access": "public"
+    "url": "git+https://github.com/speddiikga-code/korean-llm-model-kbs.git"
   },
   "ocrConfig": {
-    "urlPattern": "https://github.com/alibaba/open-code-review/releases/download/v{version}/opencodereview-{os}-{arch}",
-    "checksumPattern": "https://github.com/alibaba/open-code-review/releases/download/v{version}/sha256sum.txt"
-  },
-  "optionalDependencies": {
-    "@alibaba-group/ocr-darwin-arm64": "0.0.0",
-    "@alibaba-group/ocr-darwin-x64": "0.0.0",
-    "@alibaba-group/ocr-linux-arm64": "0.0.0",
-    "@alibaba-group/ocr-linux-x64": "0.0.0",
-    "@alibaba-group/ocr-win32-arm64": "0.0.0",
-    "@alibaba-group/ocr-win32-x64": "0.0.0"
+    "urlPattern": "https://github.com/speddiikga-code/korean-llm-model-kbs/releases/download/v{version}/opencodereview-{os}-{arch}",
+    "checksumPattern": "https://github.com/speddiikga-code/korean-llm-model-kbs/releases/download/v{version}/sha256sum.txt"
   },
   "engines": {
     "node": ">=14"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "private": true
 }

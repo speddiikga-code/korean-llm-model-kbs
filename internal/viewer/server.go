@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-//go:embed templates/*.html static/style.css static/session.js static/repos.js
+//go:embed templates/*.html static/style.css static/session.js static/repos.js i18n/*.json
 var assets embed.FS
 
 // StartServer binds addr and serves until the listener fails. openMode is one
@@ -304,6 +304,7 @@ func numberedCodeLines(code string, startLine, endLine int) []codeLine {
 
 func parseTemplate(name string) (*template.Template, error) {
 	funcMap := template.FuncMap{
+		"t":              viewerText,
 		"formatDuration": formatDuration,
 		"formatTime":     formatTime,
 		"truncate":       truncateText,

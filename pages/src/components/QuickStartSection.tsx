@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2026 alibaba/open-code-review Contributors
 
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useTranslation } from '../i18n';
 import { useResponsive } from '../hooks/useResponsive';
@@ -69,6 +69,9 @@ const CodeBlock: React.FC<{ label: string; code: string; multiline?: boolean; on
 
 const QuickStartSection: React.FC = () => {
   const { t } = useTranslation();
+  const [platform, setPlatform] = useState<'windows' | 'unix'>('windows');
+  const binary = platform === 'windows' ? '.\\ocr.exe' : './ocr';
+  const buildCommand = 'git clone https://github.com/speddiikga-code/korean-llm-model-kbs.git\ncd korean-llm-model-kbs\ngo build -o ' + (platform === 'windows' ? 'ocr.exe' : 'ocr') + ' ./cmd/opencodereview';
   const { isMobile, isTablet } = useResponsive();
   const titleStyle = useSectionTitleStyle();
   const { toastVisible, handleCopy } = useCopyToast();
@@ -109,8 +112,12 @@ const QuickStartSection: React.FC = () => {
               <img src={chevronDown} alt="" style={{ width: 16, height: 16 }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <CodeBlock label={t('quickstart.step1Label1')} code="npm i -g @alibaba-group/open-code-review" onCopy={handleCopy} />
-              <CodeBlock label={t('quickstart.step1Label2')} code="ocr version" onCopy={handleCopy} />
+              <div className="kbs-platforms">
+                <button type="button" aria-pressed={platform === 'windows'} onClick={() => setPlatform('windows')}>Windows</button>
+                <button type="button" aria-pressed={platform === 'unix'} onClick={() => setPlatform('unix')}>macOS / Linux</button>
+              </div>
+              <CodeBlock label={t('quickstart.step1Label1')} code={buildCommand} multiline onCopy={handleCopy} />
+              <CodeBlock label={t('quickstart.step1Label2')} code={`${binary} version`} onCopy={handleCopy} />
             </div>
           </div>
 
@@ -129,17 +136,14 @@ const QuickStartSection: React.FC = () => {
               <img src={chevronRight} alt="" style={{ width: 16, height: 16 }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <CodeBlock label={t('quickstart.step2Label1')} code="ocr config provider" onCopy={handleCopy} />
+              <CodeBlock label={t('quickstart.step2Label1')} code={`${binary} config provider`} onCopy={handleCopy} />
               <CodeBlock
                 label={t('quickstart.step2Label2')}
-                code={`ocr config set llm.url https://api.anthropic.com \\
-    && ocr config set llm.auth_token {{your-api-key}} \\
-    && ocr config set llm.model claude-opus-4-6 \\
-    && ocr config set llm.use_anthropic true`}
+                code={`${binary} config set language Korean`}
                 multiline
                 onCopy={handleCopy}
               />
-              <CodeBlock label={t('quickstart.step2Label3')} code="ocr llm test" onCopy={handleCopy} />
+              <CodeBlock label={t('quickstart.step2Label3')} code={`${binary} llm test`} onCopy={handleCopy} />
             </div>
           </div>
 
@@ -161,13 +165,13 @@ const QuickStartSection: React.FC = () => {
               <CodeBlock
                 label={t('quickstart.step3Label1')}
                 code={`${t('quickstart.commentReview')}
-ocr review
+${binary} review --repo path/to/your-repo --preview
 
 ${t('quickstart.commentBranch')}
-ocr review --from main --to feature-auth
+${binary} review --repo path/to/your-repo
 
 ${t('quickstart.commentCommit')}
-ocr review --commit abc123`}
+${binary} review --repo path/to/your-repo --commit abc123`}
                 multiline
                 onCopy={handleCopy}
               />

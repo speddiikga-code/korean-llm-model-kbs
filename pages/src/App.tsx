@@ -11,10 +11,10 @@ import FeaturesPage from './pages/FeaturesPage';
 import FeaturesRoutePage from './pages/FeaturesRoutePage';
 import NotFoundPage from './pages/NotFoundPage';
 
-const BenchmarkPage = React.lazy(() => import(/* webpackChunkName: "benchmark-page" */ './pages/BenchmarkPage'));
+
 const QuickStartPage = React.lazy(() => import(/* webpackChunkName: "quickstart-page" */ './pages/QuickStartPage'));
 const DocsPage = React.lazy(() => import(/* webpackChunkName: "docs-page" */ './pages/DocsPage'));
-const BlogPage = React.lazy(() => import(/* webpackChunkName: "blog-page" */ './pages/BlogPage'));
+
 
 const ScrollToTop: React.FC<{ pathname: string }> = ({ pathname }) => {
   useEffect(() => {
@@ -87,12 +87,12 @@ const App: React.FC = () => {
           <Routes location={displayLocation}>
             <Route path="/" element={<LandingPage><FeaturesPage /></LandingPage>} />
             <Route path="/features" element={<LandingPage><FeaturesRoutePage /></LandingPage>} />
-            <Route path="/benchmark" element={<LandingPage><BenchmarkPage /></LandingPage>} />
+
             <Route path="/quickstart" element={<LandingPage><QuickStartPage /></LandingPage>} />
             <Route path="/docs" element={<DocsPage />} />
             <Route path="/docs/:slug" element={<DocsPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/blog/:slug" element={<BlogPage />} />
+
+
             <Route path="*" element={<LandingPage><NotFoundPage /></LandingPage>} />
           </Routes>
         </Suspense>

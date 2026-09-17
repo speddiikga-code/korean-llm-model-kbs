@@ -30,6 +30,7 @@ document.querySelectorAll('.response-text').forEach(function(el) {
 });
 
 (function() {
+    const locale = document.querySelector('.comments-section')?.dataset || {};
     const filters = Array.from(document.querySelectorAll('.comment-filter-chip[data-filter-kind]'));
     const groups = Array.from(document.querySelectorAll('.comment-file-group'));
     const emptyState = document.querySelector('[data-comment-filter-empty]');
@@ -101,7 +102,7 @@ document.querySelectorAll('.response-text').forEach(function(el) {
             group.hidden = groupVisibleCount === 0;
             const count = group.querySelector('[data-comment-count]');
             if (count) {
-                count.textContent = groupVisibleCount + ' comment' + (groupVisibleCount === 1 ? '' : 's');
+                count.textContent = (locale.countTemplate || '{count} comments').replace('{count}', groupVisibleCount);
             }
         });
 
@@ -123,13 +124,14 @@ document.querySelectorAll('.response-text').forEach(function(el) {
         if (emptyState) {
             emptyState.hidden = visibleCount !== 0;
             emptyState.textContent = visibleCount === 0 && hiddenByMarks > 0
-                ? 'All matching comments are hidden by marks.'
-                : 'No comments match this filter.';
+                ? (locale.emptyMarks || 'All matching comments are hidden by marks.')
+                : (locale.emptyFilter || 'No comments match this filter.');
         }
 
         if (marksCount) {
-            marksCount.textContent = markedCount + ' marked, ' + hiddenByMarks + ' hidden' +
-                (marksSaveFailed ? ' — not saved (storage unavailable)' : '');
+            marksCount.textContent = (locale.marksTemplate || '{marked} marked, {hidden} hidden')
+                .replace('{marked}', markedCount).replace('{hidden}', hiddenByMarks) +
+                (marksSaveFailed ? (locale.saveFailed || ' — not saved (storage unavailable)') : '');
         }
     }
 
@@ -221,7 +223,7 @@ document.querySelectorAll('.response-text').forEach(function(el) {
         if (knownMarkStates.indexOf(state) !== -1) {
             card.dataset.mark = state;
             if (chip) {
-                chip.textContent = state;
+                chip.textContent = state === 'fixed' ? (locale.markFixed || state) : (locale.markIgnored || state);
                 chip.className = 'comment-badge mark-chip mark-' + state;
                 chip.hidden = false;
             }

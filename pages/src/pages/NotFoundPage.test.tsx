@@ -40,9 +40,7 @@ function installLocalStorageMock() {
 }
 
 function renderNotFound(language: Language) {
-  if (language !== 'en') {
-    window.localStorage.setItem('ocr-lang', language);
-  }
+  window.localStorage.setItem('kbs-lang', language);
 
   return render(
     <MemoryRouter initialEntries={['/missing']}>

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repositories - Open Code Review Viewer</title>
+    <title>{{t "Repositories"}} - {{t "Open Code Review Viewer"}}</title>
 
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 {{template "app-header" .}}
 <main>
-<h2>Repositories</h2>
+<h2>{{t "Repositories"}}</h2>
 {{if .Repos}}
 <div class="repository-search">
-    <label for="repository-search-input">Search repositories</label>
-    <input id="repository-search-input" type="search" placeholder="Search repositories..." autocomplete="off">
+    <label for="repository-search-input">{{t "Search repositories"}}</label>
+    <input id="repository-search-input" type="search" placeholder="{{t "Search repositories..."}}" autocomplete="off">
 </div>
 <table id="repositories-table" class="table">
-    <thead><tr><th>Repository</th><th>Sessions</th><th>Last Modified</th></tr></thead>
+    <thead><tr><th>{{t "Repository"}}</th><th>{{t "Sessions"}}</th><th>{{t "Last Modified"}}</th></tr></thead>
     <tbody>
     {{range .Repos}}
         <tr>
@@ -30,7 +30,7 @@
 </table>
 <script src="/static/repos.js"></script>
 {{else}}
-<p>No session data found. Run a code review first.</p>
+<p>{{t "No session data found. Run a code review first."}}</p>
 {{end}}
 </main>
 </body>

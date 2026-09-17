@@ -37,7 +37,7 @@ var delegateCmd = &cobra.Command{
 	Use:     "delegate",
 	Aliases: []string{"d"},
 	Short:   "Output review spec for host-agent delegation (no LLM required)",
-	Long: `OpenCodeReview - Delegation Mode
+	Long: `korean llm model kbs - Delegation Mode
 
 Output review spec for host-agent delegation (no LLM required).`,
 	Example: `  # Preview which files will be reviewed
@@ -89,8 +89,9 @@ func init() {
 
 // delegateContext holds the shared state for delegate sub-commands.
 type delegateContext struct {
-	cc   *commonContext
-	opts delegateOptions
+	cc       *commonContext
+	opts     delegateOptions
+	language string
 }
 
 func loadDelegateContext(opts delegateOptions) (*delegateContext, error) {
@@ -113,7 +114,19 @@ func loadDelegateContext(opts delegateOptions) (*delegateContext, error) {
 	}
 	opts.background = bg
 
-	return &delegateContext{cc: cc, opts: opts}, nil
+	language := "Korean"
+	configPath, err := defaultConfigPath()
+	if err != nil {
+		return nil, err
+	}
+	appCfg, err := LoadAppConfig(configPath)
+	if err != nil {
+		return nil, err
+	}
+	if appCfg != nil && appCfg.Language != "" {
+		language = appCfg.Language
+	}
+	return &delegateContext{cc: cc, opts: opts, language: language}, nil
 }
 
 // preview runs the agent's file-selection logic and returns the preview result.
@@ -173,6 +186,7 @@ func executeDelegatePreview(opts delegateOptions) error {
 	if opts.format == "json" {
 		return writeDelegateJSON(delegatePreviewJSON{
 			SchemaVersion:   delegateSchemaVersion,
+			Language:        dc.language,
 			Mode:            dc.reviewMode(),
 			Repository:      dc.cc.RepoDir,
 			From:            dc.opts.from,
@@ -191,6 +205,7 @@ func executeDelegatePreview(opts delegateOptions) error {
 	}
 
 	fmt.Printf("# Files (%d reviewable / %d total)\n\n", preview.ReviewableCount, preview.TotalFiles)
+	fmt.Printf("Review output language: %s. Always respond in %s.\n\n", dc.language, dc.language)
 	fmt.Printf("- mode: %s\n", dc.reviewMode())
 	if dc.opts.from != "" {
 		fmt.Printf("- from: %s\n", dc.opts.from)
@@ -236,9 +251,11 @@ func executeDelegateRule(opts delegateOptions, paths []string) error {
 	if opts.format == "json" {
 		return writeDelegateJSON(delegateRulesJSON{
 			SchemaVersion: delegateSchemaVersion,
+			Language:      dc.language,
 			Groups:        ruleGroupsJSON(groups),
 		})
 	}
+	fmt.Printf("Review output language: %s. Always respond in %s.\n\n", dc.language, dc.language)
 	fmt.Print(delegate.RuleGroupsMarkdown(groups))
 	return nil
 }
@@ -255,6 +272,7 @@ type delegatePreviewFileJSON struct {
 
 type delegatePreviewJSON struct {
 	SchemaVersion   string                    `json:"schema_version"`
+	Language        string                    `json:"language"`
 	Mode            string                    `json:"mode"`
 	Repository      string                    `json:"repository"`
 	From            string                    `json:"from,omitempty"`
@@ -281,6 +299,7 @@ type delegateRuleGroupJSON struct {
 
 type delegateRulesJSON struct {
 	SchemaVersion string                  `json:"schema_version"`
+	Language      string                  `json:"language"`
 	Groups        []delegateRuleGroupJSON `json:"groups"`
 }
 

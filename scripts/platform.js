@@ -26,6 +26,8 @@ function getPlatformPackageName() {
       fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8")
     );
     const optDeps = parentPkg.optionalDependencies || {};
+    // Source-only derivatives must not resolve an upstream native package.
+    if (parentPkg.private) return null;
     for (const name of Object.keys(optDeps)) {
       if (name.endsWith(`-${key}`)) {
         return name;

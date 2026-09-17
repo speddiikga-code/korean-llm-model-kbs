@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session Detail - Open Code Review Viewer</title>
+    <title>{{t "Session Detail"}} - {{t "Open Code Review Viewer"}}</title>
 
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -12,72 +12,72 @@
 <main>
 <div class="session-header">
     <div class="page-heading">
-        <a class="back-link" href="/r/{{.EncodedRepo}}" aria-label="Back to sessions"></a>
-        <h2>Session: {{.Session.Summary.SessionID}}</h2>
+        <a class="back-link" href="/r/{{.EncodedRepo}}" aria-label="{{t "Back to sessions"}}"></a>
+        <h2>{{t "Session"}}: {{.Session.Summary.SessionID}}</h2>
     </div>
     <div class="meta">
-        <span><strong>CWD:</strong> {{.Session.Summary.CWD}}</span>
-        <span><strong>Branch:</strong> {{.Session.Summary.GitBranch}}</span>
-        <span><strong>Mode:</strong> {{if .Session.Summary.ReviewMode}}{{.Session.Summary.ReviewMode}}{{else}}-{{end}}</span>
+        <span><strong>{{t "CWD"}}:</strong> {{.Session.Summary.CWD}}</span>
+        <span><strong>{{t "Branch"}}:</strong> {{.Session.Summary.GitBranch}}</span>
+        <span><strong>{{t "Mode"}}:</strong> {{if .Session.Summary.ReviewMode}}{{.Session.Summary.ReviewMode}}{{else}}-{{end}}</span>
         {{if eq .Session.Summary.ReviewMode "range"}}
-        <span><strong>From:</strong> <code>{{.Session.Summary.DiffFrom}}</code></span>
-        <span><strong>To:</strong> <code>{{.Session.Summary.DiffTo}}</code></span>
+        <span><strong>{{t "From"}}:</strong> <code>{{.Session.Summary.DiffFrom}}</code></span>
+        <span><strong>{{t "To"}}:</strong> <code>{{.Session.Summary.DiffTo}}</code></span>
         {{end}}
         {{if eq .Session.Summary.ReviewMode "commit"}}
-        <span><strong>Commit:</strong> <code>{{.Session.Summary.DiffCommit}}</code></span>
+        <span><strong>{{t "Commit"}}:</strong> <code>{{.Session.Summary.DiffCommit}}</code></span>
         {{end}}
-        <span><strong>Model:</strong> <code>{{.Session.Summary.Model}}</code></span>
-        <span><strong>Duration:</strong> {{formatDuration .Session.Summary.DurationSec}}</span>
-        <span><strong>Files:</strong> {{.Session.Summary.FileCount}}</span>
-        <span><strong>Status:</strong> {{if .Session.Summary.Aborted}}aborted{{else if .Session.Summary.Legacy}}legacy{{else}}{{.Session.Summary.TerminalState}}{{end}}</span>
+        <span><strong>{{t "Model"}}:</strong> <code>{{.Session.Summary.Model}}</code></span>
+        <span><strong>{{t "Duration"}}:</strong> {{formatDuration .Session.Summary.DurationSec}}</span>
+        <span><strong>{{t "Files"}}:</strong> {{.Session.Summary.FileCount}}</span>
+        <span><strong>{{t "Status"}}:</strong> {{if .Session.Summary.Aborted}}aborted{{else if .Session.Summary.Legacy}}legacy{{else}}{{.Session.Summary.TerminalState}}{{end}}</span>
     </div>
 </div>
 
 {{if .Session.Summary.RunManifest}}
 <div class="token-summary">
-    <h3>Coverage</h3>
+    <h3>{{t "Coverage"}}</h3>
     <div class="token-stats">
-        <div class="token-item"><div class="token-label">Selected</div><div class="token-value">{{.Session.Summary.SelectedCount}}</div></div>
-        <div class="token-item"><div class="token-label">Completed</div><div class="token-value">{{.Session.Summary.CompletedCount}}</div></div>
-        <div class="token-item"><div class="token-label">Reused</div><div class="token-value">{{.Session.Summary.ReusedCount}}</div></div>
-        <div class="token-item"><div class="token-label">Failed</div><div class="token-value{{if .Session.Summary.FailedCount}} token-value-error{{end}}">{{.Session.Summary.FailedCount}}</div></div>
-        <div class="token-item"><div class="token-label">Waived</div><div class="token-value">{{.Session.Summary.WaivedCount}}</div></div>
+        <div class="token-item"><div class="token-label">{{t "Selected"}}</div><div class="token-value">{{.Session.Summary.SelectedCount}}</div></div>
+        <div class="token-item"><div class="token-label">{{t "Completed"}}</div><div class="token-value">{{.Session.Summary.CompletedCount}}</div></div>
+        <div class="token-item"><div class="token-label">{{t "Reused"}}</div><div class="token-value">{{.Session.Summary.ReusedCount}}</div></div>
+        <div class="token-item"><div class="token-label">{{t "Failed"}}</div><div class="token-value{{if .Session.Summary.FailedCount}} token-value-error{{end}}">{{.Session.Summary.FailedCount}}</div></div>
+        <div class="token-item"><div class="token-label">{{t "Waived"}}</div><div class="token-value">{{.Session.Summary.WaivedCount}}</div></div>
     </div>
 </div>
 {{end}}
 
 <div class="token-summary">
-    <h3>Token Usage</h3>
+    <h3>{{t "Token Usage"}}</h3>
     <div class="token-stats">
         <div class="token-item">
-            <div class="token-label">Prompt Tokens</div>
+            <div class="token-label">{{t "Prompt Tokens"}}</div>
             <div class="token-value" title="{{.Session.TokenUsage.TotalPromptTokens}}">{{formatNumber .Session.TokenUsage.TotalPromptTokens}}</div>
         </div>
         <div class="token-item">
-            <div class="token-label">Completion Tokens</div>
+            <div class="token-label">{{t "Completion Tokens"}}</div>
             <div class="token-value" title="{{.Session.TokenUsage.TotalCompletionTokens}}">{{formatNumber .Session.TokenUsage.TotalCompletionTokens}}</div>
         </div>
         <div class="token-item">
-            <div class="token-label">Total Tokens</div>
+            <div class="token-label">{{t "Total Tokens"}}</div>
             <div class="token-value" title="{{add .Session.TokenUsage.TotalPromptTokens .Session.TokenUsage.TotalCompletionTokens}}">{{formatNumber (add .Session.TokenUsage.TotalPromptTokens .Session.TokenUsage.TotalCompletionTokens)}}</div>
         </div>
         <div class="token-item">
-            <div class="token-label">LLM Requests</div>
+            <div class="token-label">{{t "LLM Requests"}}</div>
             <div class="token-value" title="{{.Session.TokenUsage.RequestCount}}">{{formatNumber .Session.TokenUsage.RequestCount}}</div>
         </div>
         {{if or .Session.TokenUsage.TotalCacheReadTokens .Session.TokenUsage.TotalCacheWriteTokens}}
         <div class="token-item">
-            <div class="token-label">Cache Read</div>
+            <div class="token-label">{{t "Cache Read"}}</div>
             <div class="token-value" title="{{.Session.TokenUsage.TotalCacheReadTokens}}">{{formatNumber .Session.TokenUsage.TotalCacheReadTokens}}</div>
         </div>
         <div class="token-item">
-            <div class="token-label">Cache Write</div>
+            <div class="token-label">{{t "Cache Write"}}</div>
             <div class="token-value" title="{{.Session.TokenUsage.TotalCacheWriteTokens}}">{{formatNumber .Session.TokenUsage.TotalCacheWriteTokens}}</div>
         </div>
         {{end}}
         {{if .Session.Summary.LLMFailures}}
         <div class="token-item">
-            <div class="token-label">LLM Failures</div>
+            <div class="token-label">{{t "LLM Failures"}}</div>
             <div class="token-value token-value-error">{{.Session.Summary.LLMFailures}}</div>
         </div>
         {{end}}
@@ -86,12 +86,12 @@
     <details class="token-breakdown">
         <summary class="token-breakdown-toggle">
             <span class="chevron-sm"></span>
-            <span>File breakdown</span>
-            <span class="file-count-badge">{{len .}} files</span>
+            <span>{{t "File breakdown"}}</span>
+            <span class="file-count-badge">{{len .}} {{t "files"}}</span>
         </summary>
         <div class="token-breakdown-body">
             <table class="token-table">
-                <thead><tr><th>File</th><th>Prompt</th><th>Completion</th>{{if or $.Session.TokenUsage.TotalCacheReadTokens $.Session.TokenUsage.TotalCacheWriteTokens}}<th>Cache Read</th><th>Cache Write</th>{{end}}<th>Total</th></tr></thead>
+                <thead><tr><th>{{t "File"}}</th><th>{{t "Prompt"}}</th><th>{{t "Completion"}}</th>{{if or $.Session.TokenUsage.TotalCacheReadTokens $.Session.TokenUsage.TotalCacheWriteTokens}}<th>{{t "Cache Read"}}</th><th>{{t "Cache Write"}}</th>{{end}}<th>{{t "Total"}}</th></tr></thead>
                 <tbody>
                 {{range .}}
                     <tr>
@@ -110,36 +110,36 @@
 </div>
 
 {{if .Session.Comments}}
-<div class="comments-section">
-    <h3>Review Comments ({{len .Session.Comments}} findings)</h3>
+<div class="comments-section" data-count-template="{{t "{count} comments"}}" data-empty-filter="{{t "No comments match this filter."}}" data-empty-marks="{{t "All matching comments are hidden by marks."}}" data-marks-template="{{t "{marked} marked, {hidden} hidden"}}" data-save-failed="{{t " — not saved (storage unavailable)"}}" data-mark-fixed="{{t "Fixed"}}" data-mark-ignored="{{t "Ignored"}}">
+    <h3>{{t "Review Comments"}} ({{len .Session.Comments}} {{t "findings"}})</h3>
     {{with severityCounts .Session.Comments}}
-    <div class="comment-filter-bar severity-filters" aria-label="Filter comments by severity">
-        <span class="comment-filter-label">Severity:</span>
-        <button type="button" class="comment-filter-chip filter-all is-active" data-filter-kind="severity" data-filter-value="all" aria-pressed="true">All: {{len $.Session.Comments}}</button>
-        {{if .Critical}}<button type="button" class="comment-filter-chip severity-critical" data-filter-kind="severity" data-filter-value="critical" aria-pressed="false">Critical: {{.Critical}}</button>{{end}}
-        {{if .High}}<button type="button" class="comment-filter-chip severity-high" data-filter-kind="severity" data-filter-value="high" aria-pressed="false">High: {{.High}}</button>{{end}}
-        {{if .Medium}}<button type="button" class="comment-filter-chip severity-medium" data-filter-kind="severity" data-filter-value="medium" aria-pressed="false">Medium: {{.Medium}}</button>{{end}}
-        {{if .Low}}<button type="button" class="comment-filter-chip severity-low" data-filter-kind="severity" data-filter-value="low" aria-pressed="false">Low: {{.Low}}</button>{{end}}
+    <div class="comment-filter-bar severity-filters" aria-label="{{t "Filter comments by severity"}}">
+        <span class="comment-filter-label">{{t "Severity"}}:</span>
+        <button type="button" class="comment-filter-chip filter-all is-active" data-filter-kind="severity" data-filter-value="all" aria-pressed="true">{{t "All"}}: {{len $.Session.Comments}}</button>
+        {{if .Critical}}<button type="button" class="comment-filter-chip severity-critical" data-filter-kind="severity" data-filter-value="critical" aria-pressed="false">{{t "Critical"}}: {{.Critical}}</button>{{end}}
+        {{if .High}}<button type="button" class="comment-filter-chip severity-high" data-filter-kind="severity" data-filter-value="high" aria-pressed="false">{{t "High"}}: {{.High}}</button>{{end}}
+        {{if .Medium}}<button type="button" class="comment-filter-chip severity-medium" data-filter-kind="severity" data-filter-value="medium" aria-pressed="false">{{t "Medium"}}: {{.Medium}}</button>{{end}}
+        {{if .Low}}<button type="button" class="comment-filter-chip severity-low" data-filter-kind="severity" data-filter-value="low" aria-pressed="false">{{t "Low"}}: {{.Low}}</button>{{end}}
     </div>
     {{end}}
     {{with categoryCounts .Session.Comments}}
-    <div class="comment-filter-bar category-filters" aria-label="Filter comments by category">
-        <span class="comment-filter-label">Category:</span>
-        <button type="button" class="comment-filter-chip filter-all is-active" data-filter-kind="category" data-filter-value="all" aria-pressed="true">All: {{len $.Session.Comments}}</button>
-        {{if .Bug}}<button type="button" class="comment-filter-chip cat-bug" data-filter-kind="category" data-filter-value="bug" aria-pressed="false">Bug: {{.Bug}}</button>{{end}}
-        {{if .Security}}<button type="button" class="comment-filter-chip cat-security" data-filter-kind="category" data-filter-value="security" aria-pressed="false">Security: {{.Security}}</button>{{end}}
-        {{if .Performance}}<button type="button" class="comment-filter-chip cat-performance" data-filter-kind="category" data-filter-value="performance" aria-pressed="false">Performance: {{.Performance}}</button>{{end}}
-        {{if .Maintainability}}<button type="button" class="comment-filter-chip cat-maintainability" data-filter-kind="category" data-filter-value="maintainability" aria-pressed="false">Maintainability: {{.Maintainability}}</button>{{end}}
-        {{if .Test}}<button type="button" class="comment-filter-chip cat-test" data-filter-kind="category" data-filter-value="test" aria-pressed="false">Test: {{.Test}}</button>{{end}}
-        {{if .Style}}<button type="button" class="comment-filter-chip cat-style" data-filter-kind="category" data-filter-value="style" aria-pressed="false">Style: {{.Style}}</button>{{end}}
-        {{if .Documentation}}<button type="button" class="comment-filter-chip cat-documentation" data-filter-kind="category" data-filter-value="documentation" aria-pressed="false">Documentation: {{.Documentation}}</button>{{end}}
-        {{if .Other}}<button type="button" class="comment-filter-chip cat-other" data-filter-kind="category" data-filter-value="other" aria-pressed="false">Other: {{.Other}}</button>{{end}}
+    <div class="comment-filter-bar category-filters" aria-label="{{t "Filter comments by category"}}">
+        <span class="comment-filter-label">{{t "Category"}}:</span>
+        <button type="button" class="comment-filter-chip filter-all is-active" data-filter-kind="category" data-filter-value="all" aria-pressed="true">{{t "All"}}: {{len $.Session.Comments}}</button>
+        {{if .Bug}}<button type="button" class="comment-filter-chip cat-bug" data-filter-kind="category" data-filter-value="bug" aria-pressed="false">{{t "Bug"}}: {{.Bug}}</button>{{end}}
+        {{if .Security}}<button type="button" class="comment-filter-chip cat-security" data-filter-kind="category" data-filter-value="security" aria-pressed="false">{{t "Security"}}: {{.Security}}</button>{{end}}
+        {{if .Performance}}<button type="button" class="comment-filter-chip cat-performance" data-filter-kind="category" data-filter-value="performance" aria-pressed="false">{{t "Performance"}}: {{.Performance}}</button>{{end}}
+        {{if .Maintainability}}<button type="button" class="comment-filter-chip cat-maintainability" data-filter-kind="category" data-filter-value="maintainability" aria-pressed="false">{{t "Maintainability"}}: {{.Maintainability}}</button>{{end}}
+        {{if .Test}}<button type="button" class="comment-filter-chip cat-test" data-filter-kind="category" data-filter-value="test" aria-pressed="false">{{t "Test"}}: {{.Test}}</button>{{end}}
+        {{if .Style}}<button type="button" class="comment-filter-chip cat-style" data-filter-kind="category" data-filter-value="style" aria-pressed="false">{{t "Style"}}: {{.Style}}</button>{{end}}
+        {{if .Documentation}}<button type="button" class="comment-filter-chip cat-documentation" data-filter-kind="category" data-filter-value="documentation" aria-pressed="false">{{t "Documentation"}}: {{.Documentation}}</button>{{end}}
+        {{if .Other}}<button type="button" class="comment-filter-chip cat-other" data-filter-kind="category" data-filter-value="other" aria-pressed="false">{{t "Other"}}: {{.Other}}</button>{{end}}
     </div>
     {{end}}
-    <div class="comment-filter-bar marks-bar" aria-label="Comment marks">
-        <label class="marks-toggle"><input type="checkbox" data-hide-marked checked> Hide marked</label>
+    <div class="comment-filter-bar marks-bar" aria-label="{{t "Comment marks"}}">
+        <label class="marks-toggle"><input type="checkbox" data-hide-marked checked> {{t "Hide marked"}}</label>
         <span class="comment-filter-label" data-marks-count></span>
-        <button type="button" class="comment-filter-chip" data-clear-all-marks>Clear all marks</button>
+        <button type="button" class="comment-filter-chip" data-clear-all-marks>{{t "Clear all marks"}}</button>
     </div>
     <div class="comment-groups">
     {{range groupCommentsByFile .Session.Comments}}
@@ -147,7 +147,7 @@
         <summary class="comment-file-header">
             <span class="chevron"></span>
             <span class="file-path">{{.FilePath}}</span>
-            <span class="file-count-badge" data-comment-count>{{len .Comments}} comments</span>
+            <span class="file-count-badge" data-comment-count>{{len .Comments}} {{t "comments"}}</span>
         </summary>
         <div class="comment-file-body">
         {{range .Comments}}
@@ -165,23 +165,23 @@
                 <div class="comment-code-diff">
                     {{if .ExistingCode}}
                     <div class="code-panel code-existing">
-                        <div class="code-panel-label">Existing Code</div>
+                        <div class="code-panel-label">{{t "Existing Code"}}</div>
                         {{if $numbered}}<pre class="code-numbered"><code>{{range $i, $l := $lines}}{{if $i}}
 {{end}}<span class="code-line"><span class="line-no" aria-hidden="true">{{$l.Num}}</span><span class="line-text">{{$l.Text}}</span></span>{{end}}</code></pre>{{else}}<pre><code>{{.ExistingCode}}</code></pre>{{end}}
                     </div>
                     {{end}}
                     {{if .SuggestionCode}}
                     <div class="code-panel code-suggestion">
-                        <div class="code-panel-label">Suggested Change</div>
+                        <div class="code-panel-label">{{t "Suggested Change"}}</div>
                         <pre{{if $numbered}} class="code-gutter-offset"{{end}}><code>{{.SuggestionCode}}</code></pre>
                     </div>
                     {{end}}
                 </div>
                 {{end}}
                 <div class="comment-actions">
-                    <button type="button" class="mark-btn" data-set-mark="fixed">Fixed</button>
-                    <button type="button" class="mark-btn" data-set-mark="ignored">Ignored</button>
-                    <button type="button" class="mark-btn mark-clear" data-set-mark="">Clear</button>
+                    <button type="button" class="mark-btn" data-set-mark="fixed">{{t "Fixed"}}</button>
+                    <button type="button" class="mark-btn" data-set-mark="ignored">{{t "Ignored"}}</button>
+                    <button type="button" class="mark-btn mark-clear" data-set-mark="">{{t "Clear"}}</button>
                 </div>
             </div>
         {{end}}
@@ -189,7 +189,7 @@
     </details>
     {{end}}
     </div>
-    <p class="comment-filter-empty" data-comment-filter-empty hidden>No comments match this filter.</p>
+    <p class="comment-filter-empty" data-comment-filter-empty hidden>{{t "No comments match this filter."}}</p>
 </div>
 {{end}}
 
@@ -197,8 +197,8 @@
 <details class="file-accordion section-accordion">
     <summary class="file-accordion-header">
         <span class="chevron"></span>
-        <span class="section-title">Files Reviewed</span>
-        <span class="file-count-badge">{{len .Session.Summary.FilesReviewed}} files</span>
+        <span class="section-title">{{t "Files Reviewed"}}</span>
+        <span class="file-count-badge">{{len .Session.Summary.FilesReviewed}} {{t "files"}}</span>
     </summary>
     <div class="file-accordion-body">
         <ul class="file-list">
@@ -214,8 +214,8 @@
 <details class="file-accordion section-accordion" open>
     <summary class="file-accordion-header">
         <span class="chevron"></span>
-        <span class="section-title">Session Tasks</span>
-        <span class="file-count-badge">{{len .Session.SessionTasks}} tasks</span>
+        <span class="section-title">{{t "Session Tasks"}}</span>
+        <span class="file-count-badge">{{len .Session.SessionTasks}} {{t "tasks"}}</span>
     </summary>
     <div class="file-accordion-body">
         <div class="conversations">
@@ -231,8 +231,8 @@
 <details class="file-accordion section-accordion">
     <summary class="file-accordion-header">
         <span class="chevron"></span>
-        <span class="section-title">Conversations</span>
-        <span class="file-count-badge">{{len .Session.Files}} files</span>
+        <span class="section-title">{{t "Conversations"}}</span>
+        <span class="file-count-badge">{{len .Session.Files}} {{t "files"}}</span>
     </summary>
     <div class="file-accordion-body">
         <div class="conversations">
@@ -256,7 +256,7 @@
     <summary class="file-accordion-header">
         <span class="chevron"></span>
         <span class="file-path">{{sessionTaskLabel .FilePath}}</span>
-        <span class="file-count-badge">{{cardCount .Tasks}} requests</span>
+        <span class="file-count-badge">{{cardCount .Tasks}} {{t "requests"}}</span>
     </summary>
     <div class="file-accordion-body">
         {{range $tg := orderedTasks .Tasks}}
@@ -269,17 +269,17 @@
             {{$card := .}}
             <div class="card">
                 <div class="card-header">
-                    <span class="request-label">Request #{{.RequestNo}}</span>
+                    <span class="request-label">{{t "Request"}} #{{.RequestNo}}</span>
                     {{if .Model}}<span class="badge badge-model">{{.Model}}</span>{{end}}
                     {{if or .PromptTokens .CompletionTokens}}<span class="badge badge-tokens">P:<span title="{{.PromptTokens}}">{{formatNumber .PromptTokens}}</span> C:<span title="{{.CompletionTokens}}">{{formatNumber .CompletionTokens}}</span>{{if or .CacheReadTokens .CacheWriteTokens}} CR:<span title="{{.CacheReadTokens}}">{{formatNumber .CacheReadTokens}}</span> CW:<span title="{{.CacheWriteTokens}}">{{formatNumber .CacheWriteTokens}}</span>{{end}}</span>{{end}}
                     {{if .DurationMs}}<span class="badge badge-duration">{{.DurationMs}}ms</span>{{end}}
-                    {{if .Error}}<span class="badge badge-error">Error</span>{{end}}
+                    {{if .Error}}<span class="badge badge-error">{{t "Error"}}</span>{{end}}
                 </div>
                 {{if .Error}}
                 <details class="error-detail">
                     <summary class="error-detail-toggle">
                         <span class="chevron-sm"></span>
-                        <span>Error Detail</span>
+                        <span>{{t "Error Detail"}}</span>
                     </summary>
                     <div class="error-detail-body">
                         <pre class="error-content">{{.Error}}</pre>
@@ -290,7 +290,7 @@
                 <details class="tool-detail">
                     <summary class="tool-detail-toggle">
                         <span class="chevron-sm"></span>
-                        <span>Reasoning</span>
+                        <span>{{t "Reasoning"}}</span>
                     </summary>
                     <div class="tool-detail-body">
                         <div class="response-text">{{.}}</div>
@@ -315,7 +315,7 @@
                     <details class="tool-detail">
                         <summary class="tool-detail-toggle">
                             <span class="chevron-sm"></span>
-                            <span>Raw LLM response</span>
+                            <span>{{t "Raw LLM response"}}</span>
                         </summary>
                         <div class="tool-detail-body">
                             <div class="response-text">{{.}}</div>
@@ -330,28 +330,28 @@
                 {{end}}
                 {{if .ToolCalls}}
                 <div class="tool-calls-section">
-                    <div class="tool-calls-label">Tool Calls ({{len .ToolCalls}})</div>
+                    <div class="tool-calls-label">{{t "Tool Calls"}} ({{len .ToolCalls}})</div>
                     {{range .ToolCalls}}
                     <div class="tool-call-item {{if not .Ok}}tool-call-error{{end}}">
                         <div class="tool-call-header">
                             <span class="tool-icon">&#9881;</span>
                             <strong class="tool-name">{{.Name}}</strong>
                             {{if .DurationMs}}<span class="badge badge-duration">{{.DurationMs}}ms</span>{{end}}
-                            {{if not .Ok}}<span class="badge badge-error">Failed</span>{{end}}
+                            {{if not .Ok}}<span class="badge badge-error">{{t "Failed"}}</span>{{end}}
                         </div>
                         <details class="tool-detail">
                             <summary class="tool-detail-toggle">
                                 <span class="chevron-sm"></span>
-                                <span>Show Details</span>
+                                <span>{{t "Show Details"}}</span>
                             </summary>
                             <div class="tool-detail-body">
                                 <div class="tool-section">
-                                    <div class="tool-section-label">Arguments</div>
+                                    <div class="tool-section-label">{{t "Arguments"}}</div>
                                     <pre>{{.Arguments}}</pre>
                                 </div>
                                 {{if .Result}}
                                 <div class="tool-section">
-                                    <div class="tool-section-label">Result</div>
+                                    <div class="tool-section-label">{{t "Result"}}</div>
                                     <pre>{{.Result}}</pre>
                                 </div>
                                 {{end}}

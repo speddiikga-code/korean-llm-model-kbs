@@ -4,6 +4,8 @@ sidebar:
   order: 4
 ---
 
+> **KBS 에디션 참고:** 아래 고급 연동 문서는 원본 Open Code Review에서 보존한 참고 자료입니다. npm, Homebrew, 원본 GitHub Action과 플러그인 설치 명령은 원본 제품을 설치합니다. KBS를 사용하려면 먼저 [한국어 에디션 설치](../../installation/)에 따라 소스에서 빌드한 `ocr`을 PATH에 등록하세요. 자동 설치나 업데이트를 실행하는 원본 템플릿은 KBS용으로 수정한 후 사용해야 합니다. 이 에디션에서 해당 호스트 연동을 별도로 검증하지는 않았습니다.
+
 Pull Request나 Merge Request마다 OCR을 실행합니다. 업스트림 저장소는 그대로 복사해
 설정만 하면 되는 파이프라인 두 벌을 제공합니다. 하나는 GitHub Actions용, 하나는
 GitLab CI용입니다. 둘 다 [CLI 레퍼런스](../cli-reference/#json)에서 설명하는 핵심

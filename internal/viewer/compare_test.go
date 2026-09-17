@@ -205,15 +205,15 @@ func TestHandleCompare(t *testing.T) {
 	}{
 		{
 			name: "happy path", query: "before=s1&after=s2", status: http.StatusOK,
-			contains: []string{"New (1)", "Persisting (1)", "Resolved (1)", "Not reviewed (0)",
-				"newly broken", "still broken", "was broken", "none"},
+			contains: []string{"\uc0c8\ub85c \ubc1c\uacac\ub428 (1)", "\uacc4\uc18d \ubc1c\uc0dd (1)", "\ud574\uacb0\ub428 (1)", "\uac80\ud1a0\ud558\uc9c0 \uc54a\uc74c (0)",
+				"newly broken", "still broken", "was broken", viewerText("none")},
 		},
 		{
 			name:   "back link returns to sessions",
 			query:  "before=s1&after=s2",
 			status: http.StatusOK,
 			contains: []string{
-				`<a class="back-link" href="/r/myrepo" aria-label="Back to sessions">`,
+				"<a class=\"back-link\" href=\"/r/myrepo\" aria-label=\"\uc138\uc158 \ubaa9\ub85d\uc73c\ub85c\">",
 			},
 		},
 		{
@@ -223,7 +223,7 @@ func TestHandleCompare(t *testing.T) {
 			name:  "a suggested patch renders, not just the prose",
 			query: "before=s1&after=s2", status: http.StatusOK,
 			contains: []string{
-				"Existing Code", "Suggested Change",
+				viewerText("Existing Code"), viewerText("Suggested Change"),
 				"x := 1", "x := 2", // persisting finding keeps its patch
 				"z := 3", "z := 4", // new finding carries one too
 				"y := 2", // resolved finding shows the code it used to flag
@@ -234,22 +234,22 @@ func TestHandleCompare(t *testing.T) {
 			// s1 found something in a.go; the after run covered only b.go, so
 			// the unmatched before-finding is undecided, not fixed.
 			query: "before=s1&after=s3", status: http.StatusOK,
-			contains: []string{"New (0)", "Persisting (0)", "Resolved (0)", "Not reviewed (2)"},
+			contains: []string{"\uc0c8\ub85c \ubc1c\uacac\ub428 (0)", "\uacc4\uc18d \ubc1c\uc0dd (0)", "\ud574\uacb0\ub428 (0)", "\uac80\ud1a0\ud558\uc9c0 \uc54a\uc74c (2)"},
 		},
 		{
 			name:  "legacy after run reports unmatched findings as resolved",
 			query: "before=s1&after=legacy", status: http.StatusOK,
-			contains: []string{"Resolved (2)", "Not reviewed (0)"},
+			contains: []string{"\ud574\uacb0\ub428 (2)", "\uac80\ud1a0\ud558\uc9c0 \uc54a\uc74c (0)"},
 		},
 		{
 			name: "self compare is all persisting", query: "before=s1&after=s1", status: http.StatusOK,
-			contains: []string{"New (0)", "Persisting (2)", "Resolved (0)", "Not reviewed (0)"},
+			contains: []string{"\uc0c8\ub85c \ubc1c\uacac\ub428 (0)", "\uacc4\uc18d \ubc1c\uc0dd (2)", "\ud574\uacb0\ub428 (0)", "\uac80\ud1a0\ud558\uc9c0 \uc54a\uc74c (0)"},
 		},
 		{
 			name: "mode mismatch warns and still renders", query: "before=s1&after=s4", status: http.StatusOK,
 			contains: []string{
 				"review modes differ (commit vs workspace); the two runs may not have looked at the same files",
-				"New (1)", "Persisting (1)",
+				"\uc0c8\ub85c \ubc1c\uacac\ub428 (1)", "\uacc4\uc18d \ubc1c\uc0dd (1)",
 			},
 		},
 		{
@@ -272,7 +272,7 @@ func TestHandleCompare(t *testing.T) {
 			// s1's findings resolved. Only completed+reused is a verdict.
 			name:  "interrupted after run does not resolve the files it never reached",
 			query: "before=s1&after=partial", status: http.StatusOK,
-			contains: []string{"New (0)", "Persisting (0)", "Resolved (0)", "Not reviewed (2)"},
+			contains: []string{"\uc0c8\ub85c \ubc1c\uacac\ub428 (0)", "\uacc4\uc18d \ubc1c\uc0dd (0)", "\ud574\uacb0\ub428 (0)", "\uac80\ud1a0\ud558\uc9c0 \uc54a\uc74c (2)"},
 		},
 		{
 			// Reachable because encodeRepoPath collapses "/" to "-", so
@@ -361,12 +361,12 @@ func TestRenderTemplate_SessionsCompareLink(t *testing.T) {
 			name:     "two sessions link newest to next oldest",
 			sessions: []SessionSummary{{SessionID: "s-new"}, {SessionID: "s-old"}},
 			// Rows are newest-first, so the oldest row has no link.
-			contains: []string{"/compare?before=s-old&amp;after=s-new", "<th>Compare</th>"},
+			contains: []string{"/compare?before=s-old&amp;after=s-new", "<th>\ube44\uad50</th>"},
 		},
 		{
 			name:     "a single session has nothing to compare against",
 			sessions: []SessionSummary{{SessionID: "only"}},
-			contains: []string{"<th>Compare</th>"},
+			contains: []string{"<th>\ube44\uad50</th>"},
 			absent:   []string{"/compare?"},
 		},
 	}
@@ -414,8 +414,8 @@ func TestNewMux_RouteDispatch(t *testing.T) {
 			name: "compare wins over the sessionID wildcard", target: "/r/myrepo/compare?before=s1&after=s2",
 			status: http.StatusOK,
 			// Session Compare, not Session Detail: proves handleCompare ran.
-			contains: []string{"<title>Session Compare", "New (1)", "Persisting (1)"},
-			absent:   []string{"<title>Session Detail"},
+			contains: []string{"<title>\uc138\uc158 \ube44\uad50", "\uc0c8\ub85c \ubc1c\uacac\ub428 (1)", "\uacc4\uc18d \ubc1c\uc0dd (1)"},
+			absent:   []string{"<title>\uc138\uc158 \uc0c1\uc138"},
 		},
 		{
 			// The sharpest regression signal: if the wildcard captured
@@ -427,11 +427,11 @@ func TestNewMux_RouteDispatch(t *testing.T) {
 		},
 		{
 			name: "the wildcard still serves a real session", target: "/r/myrepo/s1",
-			status: http.StatusOK, contains: []string{"<title>Session Detail"},
+			status: http.StatusOK, contains: []string{"<title>\uc138\uc158 \uc0c1\uc138"},
 		},
 		{
 			name: "session list", target: "/r/myrepo", status: http.StatusOK,
-			contains: []string{"Sessions:", "<th>Compare</th>"},
+			contains: []string{"\uc138\uc158:", "<th>\ube44\uad50</th>"},
 		},
 		{
 			name: "repo list", target: "/", status: http.StatusOK,

@@ -77,24 +77,32 @@ const path = require("path");
 const fs = require("fs");
 const {
   BINARY_FILENAME,
-  getPlatformPackageName,
 } = require("../scripts/platform");
 
-function createLauncherFixture() {
+function createLauncherFixture({ sourceOnly = false } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "ocr-launcher-test-"));
-  const packageName = getPlatformPackageName();
-  assert.ok(packageName, `unsupported test platform: ${process.platform}-${process.arch}`);
+  // Model a native dependency explicitly: this source-only edition deliberately
+  // has no optional native packages in its own package.json.
+  const packageName = `@launcher-test/ocr-${process.platform}-${process.arch}`;
 
   for (const relativePath of [
     "bin/ocr.js",
     "scripts/platform.js",
     "scripts/version.js",
-    "package.json",
   ]) {
     const destination = path.join(root, relativePath);
     fs.mkdirSync(path.dirname(destination), { recursive: true });
     fs.copyFileSync(path.join(__dirname, "..", relativePath), destination);
   }
+  fs.writeFileSync(
+    path.join(root, "package.json"),
+    JSON.stringify({
+      name: "ocr-launcher-test",
+      version: "0.1.0",
+      private: sourceOnly,
+      optionalDependencies: { [packageName]: "0.0.0" },
+    })
+  );
 
   const packageDir = path.join(root, "node_modules", ...packageName.split("/"));
   const binaryPath = path.join(packageDir, "bin", BINARY_FILENAME);
@@ -110,12 +118,21 @@ function createLauncherFixture() {
     fs.symlinkSync(process.execPath, binaryPath);
   }
 
+  const sourceBinaryPath = path.join(root, "bin", BINARY_FILENAME);
+  if (sourceOnly) {
+    if (process.platform === "win32") {
+      fs.copyFileSync(process.execPath, sourceBinaryPath);
+    } else {
+      fs.symlinkSync(process.execPath, sourceBinaryPath);
+    }
+  }
+
   const home = path.join(root, "home");
   fs.mkdirSync(home);
   return {
     root,
     home,
-    binaryPath,
+    binaryPath: sourceOnly ? sourceBinaryPath : binaryPath,
     launcher: path.join(root, "bin", "ocr.js"),
     nodePath: path.join(root, "node_modules"),
   };
@@ -238,6 +255,38 @@ async function testSpawnFailure(fixture) {
   );
 }
 
+async function testSourceOnlyIsolation() {
+  const fixture = createLauncherFixture({ sourceOnly: true });
+  try {
+    const stateDir = path.join(fixture.home, ".opencodereview");
+    fs.mkdirSync(stateDir);
+    fs.writeFileSync(
+      path.join(stateDir, "update-available"),
+      JSON.stringify({ version: "99.0.0", pkg: "@alibaba-group/open-code-review" })
+    );
+    const target = writeTarget(fixture, "source-build.js", "process.exit(23);\n");
+    const result = await runLauncher(fixture, [target]);
+    assert.strictEqual(result.code, 23, "source-only launcher must run its local binary");
+    assert.ok(
+      !result.output.includes("npm i"),
+      `source-only launcher must ignore npm update hints; output: ${result.output}`
+    );
+
+    // Leave the optional native package installed, then remove the source build.
+    // A private edition must fail rather than silently run that other package.
+    fs.unlinkSync(fixture.binaryPath);
+    const missing = await runLauncher(fixture, []);
+    assert.strictEqual(missing.code, 1, "source-only launcher must not use an optional native package");
+    assert.ok(
+      !missing.output.includes("@alibaba-group"),
+      `source-only installation advice must not replace the fork; output: ${missing.output}`
+    );
+    console.log("ocr source-only isolation tests passed");
+  } finally {
+    fs.rmSync(fixture.root, { recursive: true, force: true });
+  }
+}
+
 (async () => {
   const fixture = createLauncherFixture();
   try {
@@ -254,6 +303,7 @@ async function testSpawnFailure(fixture) {
   } finally {
     fs.rmSync(fixture.root, { recursive: true, force: true });
   }
+  await testSourceOnlyIsolation();
 })().catch((err) => {
   console.error(err.stack || err.message);
   process.exitCode = 1;

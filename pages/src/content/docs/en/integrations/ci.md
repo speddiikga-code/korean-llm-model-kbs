@@ -4,6 +4,8 @@ sidebar:
   order: 4
 ---
 
+> **KBS edition note:** The advanced integration instructions below are preserved upstream reference material. Upstream npm, Homebrew, GitHub Action, and plugin installers install the original product. For KBS, first [build this edition](../../installation/) and put its `ocr` binary on PATH. Adapt upstream templates that automatically install or update the CLI before using them. These host integrations have not been separately validated for this edition.
+
 Run OCR on every Pull Request or Merge Request. The upstream repo
 ships two ready-made pipelines you copy and configure — one for
 GitHub Actions, one for GitLab CI. Both are thin wrappers around the

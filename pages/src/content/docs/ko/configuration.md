@@ -4,6 +4,8 @@ sidebar:
   order: 5
 ---
 
+> **KBS 한국어 기본값:** 새 설정에서 리뷰 언어는 `Korean`입니다. 기존 OCR 설정은 그대로 사용하므로 필요하면 `ocr config set language Korean`을 실행하세요. 아래 모델과 엔드포인트 예시는 제공업체별 설정 방법을 설명하며 모델 접근 권한은 별도로 필요합니다.
+
 설정 파일은 `~/.opencodereview/config.json`에 있습니다. 편집하는 방법은 세 가지입니다:
 
 - **대화형 TUI** — `ocr config provider` / `ocr config model`. 메뉴가 안내합니다.

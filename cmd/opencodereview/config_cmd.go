@@ -387,7 +387,7 @@ func loadOrCreateConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return &Config{}, nil
+			return &Config{Language: "Korean"}, nil
 		}
 		return nil, err
 	}

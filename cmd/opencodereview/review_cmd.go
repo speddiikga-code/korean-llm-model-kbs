@@ -59,7 +59,7 @@ var reviewCmd = &cobra.Command{
 	Use:     "review [flags]",
 	Aliases: []string{"r"},
 	Short:   "Start a diff-based code review",
-	Long:    "OpenCodeReview - AI-Powered Code Review CLI\n\nStart a diff-based code review using a configurable LLM.",
+	Long:    "korean llm model kbs - Korean AI Code Review CLI\n\nStart a diff-based code review using a configurable LLM. Review output defaults to Korean.",
 	Args:    cobra.NoArgs,
 	Example: `  # Review staged + unstaged + untracked changes in current workspace
   ocr review

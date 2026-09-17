@@ -59,6 +59,20 @@ interface MarkdownRendererProps {
   content: string;
 }
 
+// Keep native link actions (including opening a new tab) inside the Pages project.
+export function projectDocHref(href: string, currentHash: string): string {
+  if (href.startsWith('#')) {
+    return currentHash.startsWith('#/docs') ? `${currentHash.split('#').slice(0, 2).join('#')}${href}` : href;
+  }
+  if (/^[a-z][a-z\d+.-]*:|^\/\//i.test(href)) return href;
+  const [path, fragment] = href.split('#');
+  const segment = path.replace(/\/+$/, '').split('/').pop()?.replace(/\.md$/, '');
+  const slug = segment === 'ci' ? 'cicd' : segment;
+  const docs = new Set(['quickstart', 'installation', 'configuration', 'cli-reference', 'review-rules', 'architecture', 'tools', 'mcp', 'viewer', 'telemetry', 'agent-skill', 'claude-code', 'delegate', 'cicd', 'contributing', 'faq']);
+  if (slug && docs.has(slug)) return `#/docs/${slug}${fragment ? `#${fragment}` : ''}`;
+  return href;
+}
+
 /**
  * Renders markdown content with dark theme styling matching the existing DocsPage design.
  * Uses `marked` to parse markdown into HTML, then renders with styled container.
@@ -74,10 +88,16 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
     const renderer = new Renderer();
     const headingIds = extractHeadingInfo(content).map(({ id }) => id);
     let headingIndex = 0;
+    renderer.link = function ({ href, title, tokens }) {
+      const escapeAttr = (value: string) => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const target = projectDocHref(href, window.location.hash);
+      return `<a href="${escapeAttr(target)}"${title ? ` title="${escapeAttr(title)}"` : ''}>${this.parser.parseInline(tokens)}</a>`;
+    };
     renderer.image = function ({ href, title, text }: { href: string; title?: string | null; text: string }) {
       const escapeAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const titleAttr = title ? ` title="${escapeAttr(title)}"` : '';
-      return `<img src="${escapeAttr(href)}" alt="${escapeAttr(text)}"${titleAttr} />`;
+      const source = href.startsWith('/images/') ? href.slice(1) : href;
+      return `<img src="${escapeAttr(source)}" alt="${escapeAttr(text)}"${titleAttr} />`;
     };
     renderer.heading = function ({ text, depth }: { text: string; depth: number }) {
       const { text: headingText, id: explicitId } = parseExplicitHeadingId(text);

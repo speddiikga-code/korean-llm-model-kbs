@@ -6,16 +6,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../i18n';
 import { useResponsive } from '../hooks/useResponsive';
 import socialIcon from '../assets/icons/icon-github.svg';
-import brandIcon from '../assets/images/brandicon.svg';
+import '../styles/edition.css';
 
 import type { Language } from '../i18n/types';
 
 const LANG_OPTIONS: { value: Language; label: string }[] = [
   { value: 'en', label: 'English' },
-  { value: 'zh', label: '中文' }, // allow-non-english: language options are labelled in their own language
-  { value: 'ja', label: '日本語' }, // allow-non-english: language options are labelled in their own language
   { value: 'ko', label: '한국어' }, // allow-non-english: language options are labelled in their own language
-  { value: 'ru', label: 'Русский' }, // allow-non-english: language options are labelled in their own language
 ];
 
 const LANG_BADGE: Record<Language, string> = {
@@ -37,10 +34,10 @@ const DEFAULT_LANG_BADGE_FONT = "'PingFang SC', -apple-system, sans-serif";
 
 const navTabs = [
   { path: '/features', labelKey: 'navbar.features' },
-  { path: '/benchmark', labelKey: 'navbar.benchmark' },
+
   { path: '/quickstart', labelKey: 'navbar.quickstart' },
   { path: '/docs', labelKey: 'navbar.docs' },
-  { path: '/blog', labelKey: 'navbar.blog' },
+
 ];
 
 const Navbar: React.FC = () => {
@@ -95,7 +92,7 @@ const Navbar: React.FC = () => {
           style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
           onClick={() => navigate('/')}
         >
-          <img src={brandIcon} alt="Open Code Review" style={{ height: isMobile ? 20 : 24 }} />
+          <button type="button" className="kbs-brand" aria-label="korean llm model kbs"><span className="kbs-brand-mark">KBS</span><span className="kbs-brand-name">korean llm model kbs</span></button>
         </div>
 
         {/* Nav Tabs - hidden on mobile */}
@@ -140,7 +137,7 @@ const Navbar: React.FC = () => {
           {/* Language Switcher */}
           <div ref={langRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             <button
-              onClick={() => setLangOpen(v => !v)}
+              aria-label={t('edition.language')} onClick={() => setLangOpen(v => !v)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -207,12 +204,12 @@ const Navbar: React.FC = () => {
             )}
           </div>
           <a
-            href="https://github.com/alibaba/open-code-review"
+            href="https://github.com/speddiikga-code/korean-llm-model-kbs"
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: 'flex', alignItems: 'center', opacity: 0.6 }}
           >
-            <img src={socialIcon} alt="Social" style={{ width: 22, height: 22 }} />
+            <img src={socialIcon} alt="GitHub" style={{ width: 22, height: 22 }} />
           </a>
           <button
             onClick={() => navigate('/quickstart')}

@@ -11,7 +11,7 @@ const fs = require("fs");
 const os = require("os");
 
 const { resolveNativeBinary } = require("../scripts/platform");
-const { version: packageVersion } = require("../package.json");
+const { version: packageVersion, private: sourceOnly } = require("../package.json");
 const { shouldShowUpdateHint } = require("../scripts/version");
 
 // Maps a child process result to the launcher exit code.
@@ -67,13 +67,15 @@ if (require.main !== module) {
 const resolved = resolveNativeBinary();
 if (!resolved) {
   console.error(
-    "[ERROR] OpenCodeReview binary not found. Run: npm install -g @alibaba-group/open-code-review"
+    "[ERROR] korean llm model kbs binary not found. Build from this repository: go build -o bin/" +
+      (process.platform === "win32" ? "opencodereview.exe" : "opencodereview") + " ./cmd/opencodereview"
   );
   process.exit(1);
 }
 const binaryPath = resolved.path;
 
 const hintFile = path.join(os.homedir(), ".opencodereview", "update-available");
+if (!sourceOnly) {
 try {
   const hint = JSON.parse(fs.readFileSync(hintFile, "utf8"));
   if (hint.pkg && shouldShowUpdateHint(hint.version, packageVersion)) {
@@ -85,8 +87,9 @@ try {
     fs.unlinkSync(hintFile);
   }
 } catch (_) {}
+}
 
-if (!process.env.OCR_NO_UPDATE) {
+if (!process.env.OCR_NO_UPDATE && !sourceOnly) {
   const stateDir = path.join(os.homedir(), ".opencodereview");
   const tsFile = path.join(stateDir, "last-update-check");
   const cooldownMs =

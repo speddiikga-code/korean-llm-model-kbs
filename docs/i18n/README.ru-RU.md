@@ -1,3 +1,5 @@
+> **korean llm model kbs** — This file preserves upstream documentation. For this Korean edition’s installation and defaults, see [the edition README](../../README.md). Upstream packages and benchmarks describe the original project.
+
 <div align="center">
   <a href="https://open-codereview.ai">
     <img src="../../imgs/logo-core.svg" alt="OpenCodeReview logo" width="180" />

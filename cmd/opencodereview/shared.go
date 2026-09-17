@@ -252,8 +252,8 @@ func loadLLMRuntime(tpl *template.Template, toolConfigPath string, resolveOpts l
 	}
 	// Apply the language directive even when the config file is missing
 	// (upstream #fix: ApplyLanguage with empty lang falls back to default).
-	var lang string
-	if appCfg != nil {
+	lang := "Korean"
+	if appCfg != nil && appCfg.Language != "" {
 		lang = appCfg.Language
 	}
 	tpl.ApplyLanguage(lang)

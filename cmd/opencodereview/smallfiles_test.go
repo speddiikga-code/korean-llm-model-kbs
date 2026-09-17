@@ -29,8 +29,8 @@ func TestPrintVersion_Dev(t *testing.T) {
 	got := captureStdout(t, func() {
 		printVersion()
 	})
-	if !strings.Contains(got, "open-code-review dev") {
-		t.Errorf("expected 'open-code-review dev', got %q", got)
+	if !strings.Contains(got, "korean llm model kbs dev") {
+		t.Errorf("expected 'korean llm model kbs dev', got %q", got)
 	}
 	if !strings.Contains(got, runtime.GOOS+"/"+runtime.GOARCH) {
 		t.Errorf("expected OS/ARCH, got %q", got)
@@ -131,7 +131,7 @@ func TestRootCmd_Help(t *testing.T) {
 		rootCmd.SetArgs([]string{"--help"})
 		rootCmd.Execute()
 	})
-	if !strings.Contains(got, "OpenCodeReview") {
+	if !strings.Contains(got, "korean llm model kbs") {
 		t.Errorf("expected usage text, got %q", got)
 	}
 }

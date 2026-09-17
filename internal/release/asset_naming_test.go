@@ -5,6 +5,7 @@ package release
 
 import (
 	"encoding/json"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -19,7 +20,11 @@ type ocrConfig struct {
 }
 
 type packageJSON struct {
-	OcrConfig ocrConfig `json:"ocrConfig"`
+	OcrConfig  ocrConfig `json:"ocrConfig"`
+	Private    bool      `json:"private"`
+	Repository struct {
+		URL string `json:"url"`
+	} `json:"repository"`
 }
 
 func projectRoot(t *testing.T) string {
@@ -91,6 +96,20 @@ func TestURLPatternFormat(t *testing.T) {
 func TestReleaseYmlMatchesURLPattern(t *testing.T) {
 	pkg := loadPackageJSON(t)
 	yml := loadFile(t, ".github/workflows/release.yml")
+	if pkg.Private {
+		// The source-only edition retains the upstream build recipe as a
+		// reference, while the active workflow must remain an inert stub.
+		stub := regexp.MustCompile(`(?m)^jobs:\s*\n  archived:\s*\n    if: false\s*$`)
+		if !stub.MatchString(yml) {
+			t.Fatal("private source edition must disable the active release workflow")
+		}
+		jobs := regexp.MustCompile(`(?m)^  [A-Za-z_][A-Za-z0-9_-]*:\s*$`)
+		jobSection := strings.SplitN(yml, "jobs:", 2)[1]
+		if len(jobs.FindAllString(jobSection, -1)) != 1 {
+			t.Fatal("private source edition must not add an active publishing job")
+		}
+		yml = loadFile(t, ".github/upstream-workflows/release.yml")
+	}
 
 	// Match: BIN_NAME=opencodereview-${{ matrix.goos }}-${{ matrix.goarch }}
 	re := regexp.MustCompile(`BIN_NAME=(opencodereview[^\n]*\}\})`)
@@ -184,7 +203,21 @@ func TestChecksumFilenameNoVersion(t *testing.T) {
 
 func TestURLPatternHTTPS(t *testing.T) {
 	pkg := loadPackageJSON(t)
-	if !strings.HasPrefix(pkg.OcrConfig.URLPattern, "https://github.com/alibaba/open-code-review/releases/download/") {
-		t.Errorf("urlPattern should point to GitHub releases via HTTPS, got %q", pkg.OcrConfig.URLPattern)
+	repository := strings.TrimSuffix(strings.TrimPrefix(pkg.Repository.URL, "git+"), ".git")
+	u, err := url.Parse(repository)
+	if err != nil || u.Scheme != "https" || u.Host != "github.com" || u.RawQuery != "" || u.Fragment != "" {
+		t.Fatalf("repository must declare an HTTPS GitHub URL, got %q", pkg.Repository.URL)
+	}
+	parts := strings.Split(strings.Trim(u.Path, "/"), "/")
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
+		t.Fatalf("repository must identify a GitHub owner and repository, got %q", pkg.Repository.URL)
+	}
+	for name, pattern := range map[string]string{
+		"urlPattern":      pkg.OcrConfig.URLPattern,
+		"checksumPattern": pkg.OcrConfig.ChecksumPattern,
+	} {
+		if !strings.HasPrefix(pattern, repository+"/releases/download/") {
+			t.Errorf("%s should point to the declared repository's HTTPS releases, got %q", name, pattern)
+		}
 	}
 }

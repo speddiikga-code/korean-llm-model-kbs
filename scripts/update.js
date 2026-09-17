@@ -126,6 +126,8 @@ function removeHint() {
 }
 
 async function main() {
+  // Source builds are updated from their own repository, never from npm.
+  if (loadPackageJson().private) return;
   touchTimestamp();
 
   if (!acquireLock()) return;

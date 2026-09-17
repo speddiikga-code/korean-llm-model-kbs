@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Session Compare - Open Code Review Viewer</title>
+    <title>{{t "Session Compare"}} - {{t "Open Code Review Viewer"}}</title>
 
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -12,16 +12,16 @@
 <main class="compare-page">
 <div class="session-header">
     <div class="page-heading">
-        <a class="back-link" href="/r/{{.EncodedRepo}}" aria-label="Back to sessions"></a>
-        <h2>Compare sessions</h2>
+        <a class="back-link" href="/r/{{.EncodedRepo}}" aria-label="{{t "Back to sessions"}}"></a>
+        <h2>{{t "Compare sessions"}}</h2>
     </div>
     <div class="meta">
-        <span><strong>Before:</strong> <a href="/r/{{.EncodedRepo}}/{{.Before.SessionID}}"><code>{{truncate 12 .Before.SessionID}}</code></a></span>
-        <span><strong>After:</strong> <a href="/r/{{.EncodedRepo}}/{{.After.SessionID}}"><code>{{truncate 12 .After.SessionID}}</code></a></span>
-        <span><strong>Mode:</strong> {{if .Before.ReviewMode}}{{.Before.ReviewMode}}{{else}}-{{end}} to {{if .After.ReviewMode}}{{.After.ReviewMode}}{{else}}-{{end}}</span>
+        <span><strong>{{t "Before"}}:</strong> <a href="/r/{{.EncodedRepo}}/{{.Before.SessionID}}"><code>{{truncate 12 .Before.SessionID}}</code></a></span>
+        <span><strong>{{t "After"}}:</strong> <a href="/r/{{.EncodedRepo}}/{{.After.SessionID}}"><code>{{truncate 12 .After.SessionID}}</code></a></span>
+        <span><strong>{{t "Mode"}}:</strong> {{if .Before.ReviewMode}}{{.Before.ReviewMode}}{{else}}-{{end}} to {{if .After.ReviewMode}}{{.After.ReviewMode}}{{else}}-{{end}}</span>
     </div>
     {{if .Warning}}
-    <div class="meta"><span><span class="badge badge-error">warning</span> {{.Warning}}</span></div>
+    <div class="meta"><span><span class="badge badge-error">{{t "warning"}}</span> {{.Warning}}</span></div>
     {{end}}
 </div>
 
@@ -31,7 +31,7 @@
    asserted verbatim by compare_test.go — keep it contiguous. */}}
 {{range .Buckets}}
 <section class="compare-bucket {{if eq .Title "New"}}bucket-new{{else if eq .Title "Persisting"}}bucket-persisting{{else if eq .Title "Resolved"}}bucket-resolved{{else if eq .Title "Not reviewed"}}bucket-not-reviewed{{else}}bucket-unknown{{end}}">
-    <h3 class="compare-bucket-title"><span class="bucket-dot" aria-hidden="true"></span>{{.Title}} ({{len .Findings}})</h3>
+    <h3 class="compare-bucket-title"><span class="bucket-dot" aria-hidden="true"></span>{{t .Title}} ({{len .Findings}})</h3>
     {{range .Findings}}
     <div class="comment-card">
         <div class="comment-meta">
@@ -44,13 +44,13 @@
         <div class="comment-code-diff">
             {{if .ExistingCode}}
             <div class="code-panel code-existing">
-                <div class="code-panel-label">Existing Code</div>
+                <div class="code-panel-label">{{t "Existing Code"}}</div>
                 <pre><code>{{.ExistingCode}}</code></pre>
             </div>
             {{end}}
             {{if .SuggestionCode}}
             <div class="code-panel code-suggestion">
-                <div class="code-panel-label">Suggested Change</div>
+                <div class="code-panel-label">{{t "Suggested Change"}}</div>
                 <pre><code>{{.SuggestionCode}}</code></pre>
             </div>
             {{end}}
@@ -58,7 +58,7 @@
         {{end}}
     </div>
     {{else}}
-    <p class="empty-state-text">none</p>
+    <p class="empty-state-text">{{t "none"}}</p>
     {{end}}
 </section>
 {{end}}
@@ -66,4 +66,4 @@
 </body>
 </html>
 
-{{define "breadcrumbs"}}<span class="sep">/</span><a href="/r/{{.EncodedRepo}}">{{.RepoName}}</a><span class="sep">/</span><span class="current">compare</span>{{end}}
+{{define "breadcrumbs"}}<span class="sep">/</span><a href="/r/{{.EncodedRepo}}">{{.RepoName}}</a><span class="sep">/</span><span class="current">{{t "compare"}}</span>{{end}}

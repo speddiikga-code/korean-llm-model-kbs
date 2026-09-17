@@ -8,6 +8,7 @@ import { zh } from './zh';
 import { ja } from './ja';
 import { ko } from './ko';
 import { ru } from './ru';
+import { edition } from './edition';
 
 const translations: Record<Language, TranslationKeys> = { en, zh, ja, ko, ru };
 
@@ -19,26 +20,16 @@ interface LanguageContextValue {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
-const STORAGE_KEY = 'ocr-lang';
+const STORAGE_KEY = 'kbs-lang';
 
 const SUPPORTED_LANGUAGES: Language[] = ['en', 'zh', 'ja', 'ko', 'ru'];
-
-function detectBrowserLanguage(): Language | null {
-  try {
-    for (const lang of navigator.languages ?? [navigator.language]) {
-      const code = lang.toLowerCase().split('-')[0];
-      if (SUPPORTED_LANGUAGES.includes(code as Language)) return code as Language;
-    }
-  } catch {}
-  return null;
-}
 
 function getInitialLanguage(): Language {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored && SUPPORTED_LANGUAGES.includes(stored as Language)) return stored as Language;
   } catch {}
-  return detectBrowserLanguage() ?? 'en';
+  return 'ko';
 }
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -54,7 +45,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
   const t = useCallback((key: string): string => {
-    return translations[language][key as keyof TranslationKeys] ?? key;
+    return edition[language === 'ko' ? 'ko' : 'en'][key] ?? translations[language][key as keyof TranslationKeys] ?? key;
   }, [language]);
 
   return (

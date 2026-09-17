@@ -4,6 +4,8 @@ sidebar:
   order: 5
 ---
 
+> **KBS default:** New configurations use `Korean` as the review language. Existing OCR configuration is preserved; run `ocr config set language Korean` to change it. Provider examples below require access to the selected model.
+
 The config file lives at `~/.opencodereview/config.json`. You have three ways
 to edit it:
 

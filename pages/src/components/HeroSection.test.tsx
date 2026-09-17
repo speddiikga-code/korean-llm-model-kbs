@@ -1,96 +1,48 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2026 alibaba/open-code-review Contributors
+// Copyright 2026 korean llm model kbs Contributors
 
-import { describe, it, expect } from 'vitest';
+import React from 'react';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { LanguageProvider } from '../i18n';
-import HeroSection from './HeroSection';
+import HeroSection, { SOURCE_URL } from './HeroSection';
+import { edition } from '../i18n/edition';
 
 function renderHero() {
-  render(
-    <MemoryRouter>
-      <LanguageProvider>
-        <HeroSection />
-      </LanguageProvider>
-    </MemoryRouter>,
-  );
+  render(<MemoryRouter><LanguageProvider><HeroSection /></LanguageProvider></MemoryRouter>);
 }
 
-// The panel is found through the id that `aria-controls` already points at, so
-// the test leans on the accessibility wiring instead of a test-only hook.
-const panel = () => document.getElementById('install-more-panel');
-const trigger = () => screen.getByRole('button', { name: /More|Windows/i });
+describe('Korean edition homepage', () => {
+  beforeEach(() => localStorage.clear());
 
-describe('HeroSection install channels', () => {
-  it('starts on the first channel with the panel closed', () => {
+  it('starts in Korean, identifies the fork, and describes the model requirement', () => {
     renderHero();
-    expect(screen.getByText('npm i -g @alibaba-group/open-code-review')).toBeTruthy();
-    expect(panel()).toBeNull();
+    expect(document.documentElement.lang).toBe('ko');
+    expect(screen.getByRole('heading', { level: 1 }).textContent).toBe(edition.ko['hero.title'].replace('\n', ''));
+    expect(screen.getByText(edition.ko['edition.notice'])).toBeTruthy();
+    expect(screen.getByRole('link', { name: /GitHub/ }).getAttribute('href')).toBe(SOURCE_URL);
+    expect(screen.getByText(/go build -o ocr.exe/)).toBeTruthy();
   });
 
-  it('picking an overflow channel swaps the command and closes the panel', async () => {
+  it('switches build commands using keyboard-accessible platform buttons', async () => {
     const user = userEvent.setup();
     renderHero();
-
-    await user.click(trigger());
-    expect(panel()).not.toBeNull();
-
-    await user.click(screen.getByRole('button', { name: /Windows/i }));
-
-    expect(screen.getByText('irm https://open-codereview.ai/install.ps1 | iex')).toBeTruthy();
-    expect(panel()).toBeNull();
-  });
-
-  it('closes when a primary tab is clicked', async () => {
-    const user = userEvent.setup();
-    renderHero();
-
-    await user.click(trigger());
-    await user.click(screen.getByRole('button', { name: /Homebrew/i }));
-
-    expect(screen.getByText('brew install open-code-review')).toBeTruthy();
-    expect(panel()).toBeNull();
-  });
-
-  // Keyboard activation dispatches `click` with no preceding `mousedown`, so
-  // this does not go through the same path as the test above.
-  it('closes when a primary tab is activated by keyboard', async () => {
-    const user = userEvent.setup();
-    renderHero();
-
-    await user.click(trigger());
-    screen.getByRole('button', { name: /Homebrew/i }).focus();
+    const unix = screen.getByRole('button', { name: 'macOS / Linux' });
+    unix.focus();
     await user.keyboard('{Enter}');
-
-    expect(screen.getByText('brew install open-code-review')).toBeTruthy();
-    expect(panel()).toBeNull();
+    expect(unix.getAttribute('aria-pressed')).toBe('true');
+    expect(screen.getByText(/go build -o ocr \.\/cmd\/opencodereview/)).toBeTruthy();
+    await user.click(screen.getByRole('button', { name: 'Windows' }));
+    expect(screen.getByText(/go build -o ocr.exe/)).toBeTruthy();
   });
 
-  it('closes on Escape and on an outside click', async () => {
-    const user = userEvent.setup();
+  it('respects an explicitly saved English preference', () => {
+    localStorage.setItem('kbs-lang', 'en');
     renderHero();
-
-    await user.click(trigger());
-    await user.keyboard('{Escape}');
-    expect(panel()).toBeNull();
-
-    await user.click(trigger());
-    await user.click(document.body);
-    expect(panel()).toBeNull();
-  });
-
-  it('reflects the selected overflow channel on the trigger', async () => {
-    const user = userEvent.setup();
-    renderHero();
-    expect(screen.getByRole('button', { name: /^More$/i })).toBeTruthy();
-
-    await user.click(trigger());
-    await user.click(screen.getByRole('button', { name: /Windows/i }));
-
-    const collapsed = screen.getByRole('button', { name: /Windows/i });
-    expect(collapsed.getAttribute('aria-expanded')).toBe('false');
-    expect(screen.queryByRole('button', { name: /^More$/i })).toBeNull();
+    expect(document.documentElement.lang).toBe('en');
+    expect(screen.getByText(edition.en['edition.notice'])).toBeTruthy();
   });
 });

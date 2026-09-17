@@ -1,100 +1,63 @@
 ---
-title: QuickStart
+title: Quick Start
 sidebar:
   order: 3
 ---
 
-Get your first code review running in a few minutes.
+**korean llm model kbs** is a Korean-first fork of Alibaba Open Code Review. It is a code-review CLI, not a newly trained LLM or a hosted chat service. This website provides documentation.
 
-## Prerequisites
+## Requirements {#prerequisites}
 
-- **Git ≥ 2.41**
-- **Node.js ≥ 18**
-- **LLM API key** (not needed if using [Delegation Mode](../integrations/delegate/))
+Install **Git 2.41+** and **Go 1.25.5+**. Reviews require access to a model API or a compatible host agent. Code and review context are sent to the model endpoint you select; provider fees may apply.
 
-## Step 1 — Install the CLI
+## Build the Korean edition {#install}
 
 ```bash
-npm install -g @alibaba-group/open-code-review
+git clone https://github.com/speddiikga-code/korean-llm-model-kbs.git
+cd korean-llm-model-kbs
 ```
+
+Windows PowerShell:
+
+```powershell
+go build -o ocr.exe ./cmd/opencodereview
+.\ocr.exe version
+```
+
+macOS / Linux:
 
 ```bash
-ocr version
+go build -o ocr ./cmd/opencodereview
+./ocr version
 ```
 
-> See [Installation](../installation/) for more methods.
+For the examples below, replace `ocr` with `.\ocr.exe` on Windows or `./ocr` on macOS/Linux unless you have added the binary to PATH. See [Installation](../installation/).
 
-## Step 2 — Configure an LLM
-
-> If you're using [Delegation Mode](../integrations/delegate/) (e.g. running inside Claude Code), the host agent supplies the model — skip to Step 4.
+## Connect your model {#configure}
 
 ```bash
 ocr config provider
-```
-
-It lets you pick a built-in or custom provider, enter an API key, choose a model, saves everything to the config file, and then runs `ocr llm test` once to verify the endpoint. To switch models later:
-
-```bash
-ocr config model
-```
-
-### Alternative: non-interactive command
-
-In CI or a no-TUI environment, write to the same config directly with `ocr config set`:
-
-```bash
-ocr config set provider                    anthropic
-ocr config set model                       claude-opus-4-6
-ocr config set providers.anthropic.api_key sk-ant-xxxxxxxxxx
-```
-
-## Step 3 — Test connectivity
-
-```bash
+ocr config set language Korean
 ocr llm test
 ```
 
-If you get an error like `no valid LLM endpoint configured`, recheck the Step 2 config. A 401 / 403 means the token is wrong or expired.
+Enter your API key in your local terminal, never on this website or in GitHub. Configuration is stored in `~/.opencodereview/config.json`, shared with an existing OCR installation. The quality of Korean output depends on your selected model.
 
-## Step 4 — Run your first review
+## Preview and review {#review}
 
-Move into any Git repository and run:
-
-```bash
-cd path/to/your-repo
-
-# Workspace mode — reviews staged + unstaged + untracked changes (default)
-ocr review
-
-# Branch range — reviews feature-branch's changes since it diverged from main (merge-base mode)
-ocr review --from main --to feature-branch
-
-# Single commit — reviews the diff that commit introduced
-ocr review --commit abc123
-```
-
-> See [CLI Reference](../cli-reference/) for the complete list of `ocr review` flags (concurrency tuning, output format, audience mode, background context, and more) plus every other sub-command.
-
-### Want to see what would be reviewed first?
+Replace `path/to/your-repo` with the repository you want to review.
 
 ```bash
-ocr review --preview              # workspace
-ocr review -c abc123 --preview    # commit
+# Preview files without calling the model
+ocr review --repo path/to/your-repo --preview
+
+# Review local changes
+ocr review --repo path/to/your-repo
+
+# Use real branch names from your repository
+ocr review --repo path/to/your-repo --from main --to feature-branch
 ```
 
-### JSON output for systems
+If there are no changes, edit a file or choose an existing commit using `--commit`. Review suggestions before applying them.
 
-`--audience agent` suppresses the human-friendly progress UI so the only thing on stdout is the JSON / final summary — exactly what an upstream agent or CI script wants.
-
-```bash
-ocr review --format json --audience agent > review.json
-```
-
-## See Also
-
-- [Installation](../installation/) — every install method and OCR's state directory.
-- [Configuration](../configuration/) — every env var, config key, and built-in provider.
-- [CLI Reference](../cli-reference/) — every sub-command, flag, and output mode.
-- [Review Rules](../review-rules/) — customize what gets reviewed.
-- [Integrations](../integrations/agent-skill/) — embed OCR in Claude Code, an Agent skill, or CI.
-- [FAQ](../faq/) — known errors and remedies.
+See [Configuration](../configuration/), [CLI reference](../cli-reference/), and [Review rules](../review-rules/) for more options.

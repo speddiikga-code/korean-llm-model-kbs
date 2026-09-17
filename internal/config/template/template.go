@@ -273,7 +273,7 @@ func applyLanguage(conv *LlmConversation, instruction string) {
 // resolveLang returns the resolved language name for the instruction.
 func resolveLang(lang string) string {
 	if lang == "" {
-		return "English"
+		return "Korean"
 	}
 	return lang
 }

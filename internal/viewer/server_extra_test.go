@@ -86,7 +86,7 @@ func TestParseTemplate_SharedHeader(t *testing.T) {
 				Before:      SessionSummary{SessionID: "before"},
 				After:       SessionSummary{SessionID: "after"},
 			},
-			breadcrumb: `<span class="sep">/</span><a href="/r/my-repo">MyRepo</a><span class="sep">/</span><span class="current">compare</span>`,
+			breadcrumb: `<span class="sep">/</span><a href="/r/my-repo">MyRepo</a><span class="sep">/</span><span class="current">` + viewerText("compare") + `</span>`,
 		},
 	}
 	for _, tt := range tests {
@@ -108,7 +108,7 @@ func TestParseTemplate_SharedHeader(t *testing.T) {
 					t.Errorf("count of %q = %d, want 1", marker, count)
 				}
 			}
-			const brand = `<a href="/" class="nav-brand"><span class="brand-icon" aria-hidden="true"></span>Open Code Review Viewer</a>`
+			const brand = "<a href=\"/\" class=\"nav-brand\"><span class=\"brand-icon\" aria-hidden=\"true\"></span>korean llm model kbs \u00b7 \ub9ac\ubdf0 \ubdf0\uc5b4</a>"
 			if !strings.Contains(body, `<nav class="breadcrumb">`+brand+tt.breadcrumb+`</nav>`) {
 				t.Error("expected shared home link, wordmark, decorative logo and page-specific breadcrumbs")
 			}
@@ -129,7 +129,7 @@ func TestRenderTemplate_Success(t *testing.T) {
 	if ct != "text/html; charset=utf-8" {
 		t.Errorf("Content-Type = %q", ct)
 	}
-	if !strings.Contains(rr.Body.String(), "No session data found") {
+	if !strings.Contains(rr.Body.String(), "\uc138\uc158 \ub370\uc774\ud130\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. \uba3c\uc800 \ucf54\ub4dc \ub9ac\ubdf0\ub97c \uc2e4\ud589\ud558\uc138\uc694.") {
 		t.Errorf("expected empty repos message in rendered output")
 	}
 }
@@ -200,7 +200,7 @@ func TestRenderTemplate_Sessions(t *testing.T) {
 			if !strings.Contains(body, "MyProject") {
 				t.Errorf("expected repo name in sessions template")
 			}
-			if !strings.Contains(body, `<a class="back-link" href="/" aria-label="Back to repositories">`) {
+			if !strings.Contains(body, "<a class=\"back-link\" href=\"/\" aria-label=\"\uc800\uc7a5\uc18c \ubaa9\ub85d\uc73c\ub85c\">") {
 				t.Errorf("expected back link to repositories in sessions template")
 			}
 			if !strings.Contains(body, `<a href="/" class="nav-brand">`) {
@@ -245,7 +245,7 @@ func TestRenderTemplate_SessionPage(t *testing.T) {
 		t.Errorf("status = %d, want 200", rr.Code)
 	}
 	body := rr.Body.String()
-	if !strings.Contains(body, `<a class="back-link" href="/r/repo" aria-label="Back to sessions">`) {
+	if !strings.Contains(body, "<a class=\"back-link\" href=\"/r/repo\" aria-label=\"\uc138\uc158 \ubaa9\ub85d\uc73c\ub85c\">") {
 		t.Errorf("expected back link to repository sessions in session template")
 	}
 	if !strings.Contains(body, `<a href="/r/repo">MyRepo</a>`) {
@@ -302,7 +302,7 @@ func TestRenderTemplate_HidesEmptyConversationsSection(t *testing.T) {
 		},
 	})
 
-	if strings.Contains(rr.Body.String(), `<span class="section-title">Conversations</span>`) {
+	if strings.Contains(rr.Body.String(), "<span class=\"section-title\">\ub300\ud654</span>") {
 		t.Fatal("empty conversations section should not be rendered")
 	}
 }

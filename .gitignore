@@ -13,7 +13,6 @@ coverage.html
 .claude/commands/read-issue.md
 .claude/settings.local.json
 
-pages/package-lock.json
 scripts/hooks/
 scripts/publish/.env.internal
 CHANGELOG.md
@@ -45,3 +44,12 @@ bin/opencodereview
 # Python
 __pycache__/
 *.py[cod]
+
+# Korean edition local build outputs and secrets
+/ocr
+/ocr.exe
+/bin/*.exe
+**/node_modules/
+.env
+.env.*
+!.env.example

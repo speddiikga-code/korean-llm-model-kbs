@@ -4,6 +4,8 @@ sidebar:
   order: 2
 ---
 
+> **KBS 에디션 참고:** 아래 고급 연동 문서는 원본 Open Code Review에서 보존한 참고 자료입니다. npm, Homebrew, 원본 GitHub Action과 플러그인 설치 명령은 원본 제품을 설치합니다. KBS를 사용하려면 먼저 [한국어 에디션 설치](../../installation/)에 따라 소스에서 빌드한 `ocr`을 PATH에 등록하세요. 자동 설치나 업데이트를 실행하는 원본 템플릿은 KBS용으로 수정한 후 사용해야 합니다. 이 에디션에서 해당 호스트 연동을 별도로 검증하지는 않았습니다.
+
 함께 제공되는 명령을 설치하면
 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 안에서 OCR이 처음부터
 끝까지 실행됩니다. diff를 리뷰하고, 발견한 문제를 분류하고, 반영할 만한 항목은

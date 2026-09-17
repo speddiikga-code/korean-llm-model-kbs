@@ -228,14 +228,14 @@ func TestApplyLanguage(t *testing.T) {
 	}
 }
 
-func TestApplyLanguage_DefaultEnglish(t *testing.T) {
+func TestApplyLanguage_DefaultKorean(t *testing.T) {
 	tpl, err := LoadDefault()
 	if err != nil {
 		t.Fatalf("LoadDefault() error: %v", err)
 	}
 
 	tpl.ApplyLanguage("")
-	suffix := "\n\nAlways respond in English."
+	suffix := "\n\nAlways respond in Korean."
 	if !strings.HasSuffix(tpl.MainTask.Messages[0].Content, suffix) {
 		t.Errorf("MainTask system message does not end with %q", suffix)
 	}
@@ -400,8 +400,8 @@ func TestApplyLanguage_SkipsNonSystemMessages(t *testing.T) {
 }
 
 func TestResolveLang(t *testing.T) {
-	if got := resolveLang(""); got != "English" {
-		t.Errorf("resolveLang(\"\") = %q, want \"English\"", got)
+	if got := resolveLang(""); got != "Korean" {
+		t.Errorf("resolveLang(\"\") = %q, want \"Korean\"", got)
 	}
 	if got := resolveLang("German"); got != "German" {
 		t.Errorf("resolveLang(\"German\") = %q, want \"German\"", got)

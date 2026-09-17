@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production' || process.argv.includes('production');
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -10,7 +10,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[contenthash:8].bundle.js',
     chunkFilename: '[name].[contenthash:8].chunk.js',
-    publicPath: '/',
+    publicPath: 'auto',
     clean: true
   },
   optimization: {

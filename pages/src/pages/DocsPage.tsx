@@ -217,6 +217,12 @@ const DocsPage: React.FC = () => {
     if (!anchor) return;
     const href = anchor.getAttribute('href');
     if (!href) return;
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    if (href.startsWith('#/docs/')) {
+      e.preventDefault();
+      navigate(href.slice(1));
+      return;
+    }
     // Skip external links
     if (href.startsWith('http://') || href.startsWith('https://')) return;
     // Skip pure anchors (same-page scroll)
@@ -248,7 +254,7 @@ const DocsPage: React.FC = () => {
         cancelPendingScroll.current = scrollToFragmentWhenReady(anchor2);
       }
     }
-  }, [navigateToDoc]);
+  }, [navigateToDoc, navigate]);
 
   const scrollToHeading = useCallback((id: string) => {
     const el = document.getElementById(id);

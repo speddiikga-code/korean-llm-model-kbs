@@ -14,11 +14,13 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "ocr",
-	Short: "OpenCodeReview - AI-Powered Code Review CLI",
-	Long: `OpenCodeReview - AI-Powered Code Review CLI
+	Short: "korean llm model kbs - Korean AI Code Review CLI",
+	Long: `korean llm model kbs - Korean AI Code Review CLI
 
 An AI-powered code review tool that reads git diffs, sends them to a
-configurable LLM service, and generates review comments.`,
+configurable LLM service, and generates review comments in Korean by default.
+Based on Alibaba Open Code Review; this edition does not contain model weights.
+Set another output language with: ocr config set language English`,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 	// Runs for every subcommand, always before any RunE: validate --color once
@@ -79,7 +81,7 @@ func commandNeedsGit(cmd *cobra.Command) bool {
 }
 
 func versionString() string {
-	s := fmt.Sprintf("open-code-review %s", Version)
+	s := fmt.Sprintf("korean llm model kbs %s", Version)
 	if GitCommit != "" {
 		s += fmt.Sprintf(" (%s)", GitCommit)
 	}
@@ -87,6 +89,6 @@ func versionString() string {
 	if BuildDate != "" {
 		s += fmt.Sprintf("built at: %s\n", BuildDate)
 	}
-	s += "https://github.com/alibaba/open-code-review\n"
+	s += "Korean edition of https://github.com/alibaba/open-code-review\n"
 	return s
 }

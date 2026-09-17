@@ -195,13 +195,13 @@ func TestParseTemplate_SessionWithComments(t *testing.T) {
 	if err := tmpl.Execute(rr, sessionPageData{EncodedRepo: "r", RepoName: "R", Session: vs}); err != nil {
 		t.Fatalf("execute session.html with comments: %v", err)
 	}
-	if !strings.Contains(rr.Body.String(), "Review Comments") {
-		t.Error("rendered page missing Review Comments section")
+	if !strings.Contains(rr.Body.String(), "\ub9ac\ubdf0 \ucf54\uba58\ud2b8") {
+		t.Error("rendered page missing \ub9ac\ubdf0 \ucf54\uba58\ud2b8 section")
 	}
 	body := rr.Body.String()
 	for _, want := range []string{
-		`<span class="comment-filter-label">Severity:</span>`,
-		`<span class="comment-filter-label">Category:</span>`,
+		`<span class="comment-filter-label">` + viewerText("Severity") + `:</span>`,
+		`<span class="comment-filter-label">` + viewerText("Category") + `:</span>`,
 		`data-filter-kind="severity" data-filter-value="all"`,
 		`data-filter-kind="category" data-filter-value="all"`,
 		`data-filter-kind="severity" data-filter-value="critical"`,
@@ -307,7 +307,7 @@ func TestParseTemplate_ExistingCodeLineNumbers(t *testing.T) {
 		{
 			name:       "suggestion block is never numbered",
 			comment:    &ReviewComment{FilePath: "a.go", Content: "c", SuggestionCode: "x\ny", StartLine: 10, EndLine: 11},
-			wantHas:    []string{`<div class="code-panel-label">Suggested Change</div>`, "<pre><code>x\ny</code></pre>"},
+			wantHas:    []string{`<div class="code-panel-label">` + viewerText("Suggested Change") + `</div>`, "<pre><code>x\ny</code></pre>"},
 			wantHasNot: []string{`class="line-no"`},
 		},
 		{
@@ -321,9 +321,9 @@ func TestParseTemplate_ExistingCodeLineNumbers(t *testing.T) {
 				EndLine:        11,
 			},
 			wantHas: []string{
-				`<div class="code-panel-label">Existing Code</div>`,
+				`<div class="code-panel-label">` + viewerText("Existing Code") + `</div>`,
 				`<pre class="code-numbered">`,
-				`<div class="code-panel-label">Suggested Change</div>`,
+				`<div class="code-panel-label">` + viewerText("Suggested Change") + `</div>`,
 				"<pre class=\"code-gutter-offset\"><code>x\ny</code></pre>",
 			},
 			wantHasNot: []string{
@@ -341,7 +341,7 @@ func TestParseTemplate_ExistingCodeLineNumbers(t *testing.T) {
 				EndLine:        14,
 			},
 			wantHas: []string{
-				`<div class="code-panel-label">Suggested Change</div>`,
+				`<div class="code-panel-label">` + viewerText("Suggested Change") + `</div>`,
 				"<pre><code>x\ny</code></pre>",
 			},
 			wantHasNot: []string{

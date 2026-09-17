@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sessions - Open Code Review Viewer</title>
+    <title>{{t "Sessions"}} - {{t "Open Code Review Viewer"}}</title>
 
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -11,12 +11,12 @@
 {{template "app-header" .}}
 <main>
 <div class="page-heading">
-    <a class="back-link" href="/" aria-label="Back to repositories"></a>
-    <h2>Sessions: {{.RepoName}}</h2>
+    <a class="back-link" href="/" aria-label="{{t "Back to repositories"}}"></a>
+    <h2>{{t "Sessions"}}: {{.RepoName}}</h2>
 </div>
 {{if .Sessions}}
 <table class="table">
-    <thead><tr><th>Session ID</th><th>Branch</th><th>Mode</th><th>Model</th><th>Files</th><th>Status</th><th>Comments</th><th>Duration</th><th>Started At</th><th>Compare</th></tr></thead>
+    <thead><tr><th>{{t "Session ID"}}</th><th>{{t "Branch"}}</th><th>{{t "Mode"}}</th><th>{{t "Model"}}</th><th>{{t "Files"}}</th><th>{{t "Status"}}</th><th>{{t "Comments"}}</th><th>{{t "Duration"}}</th><th>{{t "Started At"}}</th><th>{{t "Compare"}}</th></tr></thead>
     <tbody>
     {{range $i, $s := .Sessions}}
         <tr>
@@ -31,13 +31,13 @@
             <td>{{formatTime $s.Timestamp}}</td>
             {{/* Rows are newest-first, so the next-older session is index+1.
                  The oldest row has no older neighbour to compare against. */}}
-            <td>{{if lt (add $i 1) (len $.Sessions)}}{{$prev := index $.Sessions (add $i 1)}}<a href="/r/{{$.EncodedRepo}}/compare?before={{$prev.SessionID}}&amp;after={{$s.SessionID}}">compare</a>{{else}}-{{end}}</td>
+            <td>{{if lt (add $i 1) (len $.Sessions)}}{{$prev := index $.Sessions (add $i 1)}}<a href="/r/{{$.EncodedRepo}}/compare?before={{$prev.SessionID}}&amp;after={{$s.SessionID}}">{{t "compare"}}</a>{{else}}-{{end}}</td>
         </tr>
     {{end}}
     </tbody>
 </table>
 {{else}}
-<p>No sessions found for this repository.</p>
+<p>{{t "No sessions found for this repository."}}</p>
 {{end}}
 </main>
 </body>

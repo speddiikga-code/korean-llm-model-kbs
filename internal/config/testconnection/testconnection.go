@@ -41,7 +41,7 @@ func LoadDefault() (*LlmConversation, error) {
 
 func resolveLang(lang string) string {
 	if lang == "" {
-		return "English"
+		return "Korean"
 	}
 	return lang
 }

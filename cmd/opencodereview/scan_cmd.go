@@ -56,7 +56,7 @@ var scanCmd = &cobra.Command{
 	Use:     "scan [flags]",
 	Aliases: []string{"s"},
 	Short:   "Scan entire files (no diff required)",
-	Long:    "OpenCodeReview - Full-File Scan\n\nScan entire files for code review without requiring a diff.",
+	Long:    "korean llm model kbs - Full-File Scan\n\nScan entire files for code review without requiring a diff. Review output defaults to Korean.",
 	Args:    cobra.NoArgs,
 	Example: `  # Scan the entire repository
   ocr scan
@@ -184,9 +184,11 @@ func executeScan(opts scanOptions) (retErr error) {
 	}
 	// Apply language to the scan template too (loadLLMRuntime only mutates
 	// the diff-review template it was handed).
-	if rt.AppCfg != nil {
-		scanTpl.ApplyLanguage(rt.AppCfg.Language)
+	scanLanguage := "Korean"
+	if rt.AppCfg != nil && rt.AppCfg.Language != "" {
+		scanLanguage = rt.AppCfg.Language
 	}
+	scanTpl.ApplyLanguage(scanLanguage)
 
 	// file_read_diff is meaningless in scan mode (no diff exists). Hiding it
 	// from MainToolDefs stops the LLM from burning tool-call rounds probing

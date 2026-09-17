@@ -44,7 +44,7 @@ func TestHandleRepos_EmptyRoot(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Errorf("status = %d, want 200", rr.Code)
 	}
-	if !strings.Contains(rr.Body.String(), "No session data found") {
+	if !strings.Contains(rr.Body.String(), "\uc138\uc158 \ub370\uc774\ud130\uac00 \uc5c6\uc2b5\ub2c8\ub2e4. \uba3c\uc800 \ucf54\ub4dc \ub9ac\ubdf0\ub97c \uc2e4\ud589\ud558\uc138\uc694.") {
 		t.Errorf("expected empty-state message in body")
 	}
 }
@@ -227,7 +227,7 @@ func TestHandleSession_GroupingRendersPaths(t *testing.T) {
 	}
 	// The raw index JSON is still available (collapsed) for audit, but the
 	// primary view is the path list, not a bare "files":[0,1].
-	if !strings.Contains(body, "Raw LLM response") {
+	if !strings.Contains(body, viewerText("Raw LLM response")) {
 		t.Error("raw LLM response fallback should still be present for audit")
 	}
 }

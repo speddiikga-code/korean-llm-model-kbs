@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { LanguageProvider } from '../i18n';
 import { extractHeadings } from '../utils/extractHeadings';
-import MarkdownRenderer from './MarkdownRenderer';
+import MarkdownRenderer, { projectDocHref } from './MarkdownRenderer';
 
 // The headings are Russian on purpose: explicit heading IDs exist for text that
 // cannot produce a usable ASCII slug on its own. Held in constants rather than
@@ -13,6 +13,21 @@ import MarkdownRenderer from './MarkdownRenderer';
 const H2 = 'Что делает навык'; // allow-non-english: fixture heading that cannot produce an ASCII slug
 const H4 = 'Публикация'; // allow-non-english: fixture heading that cannot produce an ASCII slug
 const CONTENT = `## ${H2} {#what-the-skill-does}\n\n#### ${H4} {#service-account}`;
+
+describe('GitHub project documentation links', () => {
+  it('keeps cross-document links and fragments inside the hash router', () => {
+    expect(projectDocHref('../installation/#windows', '#/docs/quickstart')).toBe('#/docs/installation#windows');
+    expect(projectDocHref('/docs/configuration', '#/docs/quickstart')).toBe('#/docs/configuration');
+    expect(projectDocHref('../integrations/ci/', '#/docs/quickstart')).toBe('#/docs/cicd');
+    expect(projectDocHref('#configure', '#/docs/quickstart#review')).toBe('#/docs/quickstart#configure');
+  });
+
+  it('leaves external and non-document links untouched', () => {
+    expect(projectDocHref('https://example.com/docs/quickstart', '#/docs/quickstart')).toBe('https://example.com/docs/quickstart');
+    expect(projectDocHref('mailto:hello@example.com', '#/docs/quickstart')).toBe('mailto:hello@example.com');
+    expect(projectDocHref('../download.zip', '#/docs/quickstart')).toBe('../download.zip');
+  });
+});
 
 describe('MarkdownRenderer heading IDs', () => {
   it('renders an explicit heading ID without displaying its marker', () => {

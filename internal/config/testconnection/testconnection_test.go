@@ -44,7 +44,7 @@ func TestResolveLang(t *testing.T) {
 		input string
 		want  string
 	}{
-		{"", "English"},
+		{"", "Korean"},
 		{"Chinese", "Chinese"},
 		{"Japanese", "Japanese"},
 	}
@@ -88,7 +88,7 @@ func TestApplyLanguage_EmptyLang(t *testing.T) {
 
 	conv.ApplyLanguage("")
 
-	expected := "Base.\n\nAlways respond in English."
+	expected := "Base.\n\nAlways respond in Korean."
 	if conv.Messages[0].Content != expected {
 		t.Errorf("content = %q, want %q", conv.Messages[0].Content, expected)
 	}

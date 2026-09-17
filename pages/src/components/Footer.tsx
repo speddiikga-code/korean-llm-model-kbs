@@ -10,10 +10,7 @@ import type { Language } from '../i18n/types';
 
 const LANG_OPTIONS: { value: Language; label: string }[] = [
   { value: 'en', label: 'English' },
-  { value: 'zh', label: '中文' }, // allow-non-english: language options are labelled in their own language
-  { value: 'ja', label: '日本語' }, // allow-non-english: language options are labelled in their own language
   { value: 'ko', label: '한국어' }, // allow-non-english: language options are labelled in their own language
-  { value: 'ru', label: 'Русский' }, // allow-non-english: language options are labelled in their own language
 ];
 
 const Footer: React.FC = () => {
@@ -48,17 +45,17 @@ const Footer: React.FC = () => {
           flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'space-between',
           alignItems: isMobile ? 'flex-start' : 'center',
-          gap: isMobile ? 16 : 0,
+          gap: 20,
           maxWidth: 1440,
           margin: '0 auto',
         }}
       >
-        <a href="https://github.com/alibaba/open-code-review" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
+        <a href="https://github.com/speddiikga-code/korean-llm-model-kbs" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: 6, textDecoration: 'none' }}>
           <img src={githubIcon} alt="" style={{ width: 18, height: 18 }} />
           <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>{t('footer.brand')}</span>
         </a>
         <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
-          {t('footer.copyright')}
+          {t('footer.copyright')}<br /><a href="https://github.com/alibaba/open-code-review" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>{t('edition.upstream')}</a>
         </span>
 
         {/* Language Switcher */}

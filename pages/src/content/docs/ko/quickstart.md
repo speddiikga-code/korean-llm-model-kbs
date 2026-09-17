@@ -4,97 +4,80 @@ sidebar:
   order: 3
 ---
 
-몇 분이면 첫 코드 리뷰를 실행할 수 있습니다.
+**korean llm model kbs**는 Alibaba Open Code Review 기반의 한국어 코드 리뷰 CLI입니다. 별도로 학습한 모델이나 브라우저에서 실행되는 채팅 서비스가 아닙니다. 이 사이트는 사용 안내와 문서를 제공합니다.
 
-## 사전 요구 사항 {#prerequisites}
+## 준비물 {#prerequisites}
 
-- **Git ≥ 2.41**
-- **Node.js ≥ 18**
-- **LLM API 키** ([Delegation Mode](../integrations/delegate/)를 사용한다면 필요 없음)
+- **Git 2.41 이상**
+- **Go 1.25.5 이상**
+- 사용할 **LLM 제공업체의 API 키와 모델** 또는 [위임 모드](../integrations/delegate/)를 지원하는 호스트 에이전트
 
-## 1단계 — CLI 설치 {#step-1-install-the-cli}
+코드 리뷰에 필요한 코드와 맥락은 선택한 모델 엔드포인트로 전송됩니다. 자체 호스팅 모델을 쓰려면 호환되는 API 서버를 별도로 준비하세요. API 사용료는 제공업체의 정책에 따릅니다.
 
-```bash
-npm install -g @alibaba-group/open-code-review
-```
+## 1. 소스 복제 및 빌드 {#install}
 
 ```bash
-ocr version
+git clone https://github.com/speddiikga-code/korean-llm-model-kbs.git
+cd korean-llm-model-kbs
 ```
 
-> 다른 설치 방법은 [설치](../installation/)를 참고하세요.
+Windows PowerShell:
 
-## 2단계 — LLM 설정 {#step-2-configure-an-llm}
+```powershell
+go build -o ocr.exe ./cmd/opencodereview
+.\ocr.exe version
+```
 
-> [Delegation Mode](../integrations/delegate/)를 사용 중이라면(예: Claude Code 안에서 실행) 호스트 Agent가 모델을 제공하므로 4단계로 건너뛰세요.
+macOS / Linux:
+
+```bash
+go build -o ocr ./cmd/opencodereview
+./ocr version
+```
+
+아래 예시의 `ocr`은 빌드한 실행 파일을 뜻합니다. PATH에 추가하지 않았다면 Windows에서는 `.\ocr.exe`, macOS / Linux에서는 `./ocr`로 바꿔 실행하세요. 더 자세한 내용은 [설치](../installation/)를 참고하세요.
+
+## 2. 모델 연결 {#configure}
 
 ```bash
 ocr config provider
-```
-
-내장 프로바이더나 커스텀 프로바이더를 고르고 API 키를 입력한 뒤 모델을 선택하면, 명령이 모든 값을 설정 파일에 저장하고 `ocr llm test`를 한 번 실행해 엔드포인트를 검증합니다. 나중에 모델을 바꾸려면:
-
-```bash
-ocr config model
-```
-
-### 대안: 비대화형 명령 {#alternative-non-interactive-command}
-
-CI나 TUI가 없는 환경에서는 `ocr config set`으로 같은 설정 파일에 직접 기록합니다:
-
-```bash
-ocr config set provider                    anthropic
-ocr config set model                       claude-opus-4-6
-ocr config set providers.anthropic.api_key sk-ant-xxxxxxxxxx
-```
-
-## 3단계 — 연결 테스트 {#step-3-test-connectivity}
-
-```bash
+ocr config set language Korean
 ocr llm test
 ```
 
-`no valid LLM endpoint configured` 같은 오류가 나오면 2단계 설정을 다시 확인하세요. 401 / 403은 토큰이 잘못됐거나 만료됐다는 뜻입니다.
+제공업체를 선택하고, 로컬 터미널에 API 키를 입력한 뒤 사용할 모델을 고릅니다. API 키를 이 웹사이트나 GitHub에 입력하지 마세요. 설정은 `~/.opencodereview/config.json`에 저장되며 기존 OCR 설정이 있으면 함께 사용됩니다.
 
-## 4단계 — 첫 리뷰 실행 {#step-4-run-your-first-review}
+연결 테스트가 실패하면 모델 접근 권한, API 키, 엔드포인트 URL을 [설정 문서](../configuration/)에서 확인하세요. 한국어 리뷰 품질은 연결한 모델의 한국어 지원 능력에 따라 달라집니다.
 
-아무 Git 저장소로 이동해 실행합니다:
+## 3. 리뷰 범위 확인 {#preview}
 
-```bash
-cd path/to/your-repo
-
-# 워크스페이스 모드 — 스테이징된 + 스테이징되지 않은 + 추적되지 않은 변경을 리뷰(기본값)
-ocr review
-
-# 브랜치 범위 — feature-branch가 main에서 분기한 이후의 변경을 리뷰(merge-base 모드)
-ocr review --from main --to feature-branch
-
-# 단일 커밋 — 해당 커밋이 도입한 diff를 리뷰
-ocr review --commit abc123
-```
-
-> `ocr review`의 전체 플래그 목록(동시성 조정, 출력 형식, 출력 대상 모드, 배경 맥락 등)과 다른 모든 하위 명령은 [CLI 레퍼런스](../cli-reference/)를 참고하세요.
-
-### 무엇이 리뷰될지 먼저 보고 싶다면 {#want-to-see-what-would-be-reviewed-first}
+`path/to/your-repo`를 리뷰할 Git 저장소의 실제 경로로 바꾸세요. 빌드한 KBS 폴더에서 다른 저장소를 지정할 수 있습니다.
 
 ```bash
-ocr review --preview              # 워크스페이스
-ocr review -c abc123 --preview    # 커밋
+ocr review --repo path/to/your-repo --preview
 ```
 
-### 시스템 연동을 위한 JSON 출력 {#json-output-for-systems}
+`--preview`는 대상 파일만 확인하며 LLM을 호출하지 않습니다. 변경 사항이 없으면 먼저 리뷰할 저장소에서 파일을 수정하거나 커밋 범위를 지정하세요.
 
-`--audience agent`는 사람용 진행 UI를 숨겨 stdout에 JSON / 최종 요약만 남깁니다. 상위 Agent나 CI 스크립트가 원하는 형태 그대로입니다.
+## 4. 한국어로 리뷰 {#review}
 
 ```bash
-ocr review --format json --audience agent > review.json
+# 현재 작업 내용
+ocr review --repo path/to/your-repo
+
+# 브랜치 비교: 실제 존재하는 브랜치 이름으로 바꾸세요
+ocr review --repo path/to/your-repo --from main --to feature-branch
+
+# 특정 커밋: 실제 커밋 해시로 바꾸세요
+ocr review --repo path/to/your-repo --commit abc123
 ```
 
-## 관련 문서 {#see-also}
+리뷰는 수정 제안입니다. 적용하기 전에 코드 맥락과 테스트 결과를 직접 확인하세요.
 
-- [설치](../installation/) — 모든 설치 방법과 OCR의 상태 디렉터리.
-- [설정](../configuration/) — OCR이 인식하는 모든 환경 변수, 설정 키, 내장 프로바이더.
-- [CLI 레퍼런스](../cli-reference/) — 모든 하위 명령, 플래그, 출력 모드.
-- [리뷰 규칙](../review-rules/) — 리뷰 대상 커스터마이즈.
-- [연동](../integrations/agent-skill/) — Claude Code, Agent 스킬, CI에 OCR 넣기.
-- [FAQ](../faq/) — 알려진 오류와 해결 방법.
+## 다음 단계 {#next}
+
+- [설정](../configuration/) — 모델, 언어, API 엔드포인트 설정
+- [CLI 레퍼런스](../cli-reference/) — 명령과 플래그
+- [리뷰 규칙](../review-rules/) — 팀의 리뷰 기준 적용
+- [세션 뷰어](../viewer/) — 로컬 리뷰 이력 확인
+- [원본 프로젝트](https://github.com/alibaba/open-code-review) — 기반 프로젝트와 Apache-2.0 라이선스

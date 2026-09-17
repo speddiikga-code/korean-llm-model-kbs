@@ -4,6 +4,8 @@ sidebar:
   order: 1
 ---
 
+> **KBS edition note:** The advanced integration instructions below are preserved upstream reference material. Upstream npm, Homebrew, GitHub Action, and plugin installers install the original product. For KBS, first [build this edition](../../installation/) and put its `ocr` binary on PATH. Adapt upstream templates that automatically install or update the CLI before using them. These host integrations have not been separately validated for this edition.
+
 Register OCR as a callable skill so an agent framework can invoke it
 with the right flags, prerequisite checks, and triage rubric — without
 you re-deriving any of that on the calling side.
