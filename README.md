@@ -1,204 +1,100 @@
-<div align="center">
-  <a href="https://open-codereview.ai">
-    <img src="imgs/logo-core.svg" alt="OpenCodeReview logo" width="180" />
-  </a>
-  <h1>OpenCodeReview</h1>
-</div>
+# korean llm model kbs
 
-<p align="center">
-  <a href="https://trendshift.io/repositories/41087?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-41087" target="_blank" rel="noopener noreferrer">
-    <img src="https://trendshift.io/api/badge/repositories/41087" alt="alibaba%2Fopen-code-review | Trendshift" style="width: 280px; height: 60px;" width="280" height="60" />
-  </a>
-</p>
-<p align="center">
-  <a href="https://trendshift.io/repositories/41087" target="_blank">
-    <img src="https://trendshift.io/api/badge/trendshift/repositories/41087/weekly?language=Go" alt="alibaba%2Fopen-code-review | Trendshift" style="width: 280px; height: 60px;" width="280" height="60" />
-  </a>
-  <a href="https://trendshift.io/repositories/41087" target="_blank">
-    <img src="https://trendshift.io/api/badge/trendshift/repositories/41087/monthly?language=Go" alt="alibaba%2Fopen-code-review | Trendshift" style="width: 280px; height: 60px;" width="280" height="60" />
-  </a>
-</p>
-<p align="center">
-  <a href="https://www.npmjs.com/package/@alibaba-group/open-code-review"><img alt="npm" src="https://img.shields.io/npm/v/@alibaba-group/open-code-review?style=flat-square" /></a>
-  <a href="https://github.com/alibaba/open-code-review/actions/workflows/release.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/alibaba/open-code-review/release.yml?style=flat-square" /></a>
-  <a href="https://github.com/alibaba/open-code-review/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/alibaba/open-code-review?style=flat-square" /></a>
-  <a href="https://deepwiki.com/alibaba/open-code-review"><img alt="Ask DeepWiki" src="https://deepwiki.com/badge.svg" /></a>
-  <a href="https://www.bestpractices.dev/projects/13328"><img alt="OpenSSF Best Practices" src="https://img.shields.io/badge/OpenSSF-Gold-D4AF37?style=flat-square" /></a>
-</p>
-<p align="center">
-  <a href="#supported-platforms"><img alt="Windows" src="https://img.shields.io/badge/Windows-supported-blue.svg" /></a>
-  <a href="#supported-platforms"><img alt="macOS" src="https://img.shields.io/badge/macOS-supported-blue.svg" /></a>
-  <a href="#supported-platforms"><img alt="Linux" src="https://img.shields.io/badge/Linux-supported-blue.svg" /></a>
-  <a href="#supported-agents"><img alt="Claude Code" src="https://img.shields.io/badge/Claude_Code-supported-blueviolet.svg" /></a>
-  <a href="#supported-agents"><img alt="Codex" src="https://img.shields.io/badge/Codex-supported-blueviolet.svg" /></a>
-  <a href="#supported-agents"><img alt="Cursor" src="https://img.shields.io/badge/Cursor-supported-blueviolet.svg" /></a>
-</p>
-<p align="center">
-  English | <a href="docs/i18n/README.zh-CN.md">简体中文</a> | <a href="docs/i18n/README.ja-JP.md">日本語</a> | <a href="docs/i18n/README.ko-KR.md">한국어</a> | <a href="docs/i18n/README.ru-RU.md">Русский</a>
-</p>
+**한국어로 코드를 읽고, 문제를 이해하고, 개선하세요.**
 
----
+[웹사이트](https://speddiikga-code.github.io/korean-llm-model-kbs/) · [한국어 문서](https://speddiikga-code.github.io/korean-llm-model-kbs/#/docs/quickstart) · [원본 프로젝트](https://github.com/alibaba/open-code-review)
 
-## What is Open Code Review?
+`korean llm model kbs`는 Alibaba의 **Open Code Review**를 기반으로 만든 한국어 우선 코드 리뷰 도구입니다. Git 변경 사항과 전체 파일을 분석하여 코드 위치와 함께 리뷰 결과를 제공합니다. CLI 명령어는 기존과 호환되는 `ocr`를 사용합니다.
 
-Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply configure a model endpoint to get started.
+이 프로젝트는 **새로 학습한 LLM이나 모델 가중치가 아닙니다**. 사용자가 선택한 LLM API 또는 호환되는 로컬 모델 서버에 연결하는 소프트웨어입니다. Alibaba의 공식 한국어 제품이 아닌 독립적인 파생 프로젝트입니다.
 
-It reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — not just surface-level diff feedback. Beyond diff review, `ocr scan` reviews entire files for auditing unfamiliar codebases or directories that have no meaningful diff.
+## 한국어 에디션
 
-Visit the [official website](https://open-codereview.ai) for more details.
+- 리뷰·스캔 결과의 기본 언어를 한국어로 설정합니다. 명시적인 언어 설정은 계속 적용됩니다.
+- 한국어를 기본으로 표시하는 웹사이트와 한국어 설치·설정 문서를 제공합니다.
+- Git 변경 사항 리뷰, 전체 파일 스캔, 규칙, 세션 관리, 위임 모드를 유지합니다.
+- GitHub Pages에서 프로젝트 웹사이트를 배포합니다.
 
-![Highlights](imgs/highlights-en.png)
+일부 CLI 상태 메시지와 고급 개발자 문서는 원본의 영어를 유지합니다. 모델 응답의 품질과 한국어 표현은 연결한 모델에 따라 달라집니다.
 
-## Benchmark
+## 설치
 
-> Compared to general-purpose agents (Claude Code), Open Code Review achieves significantly higher **Precision** and **F1** with the same underlying model, while consuming only **~1/9 of the tokens** and completing reviews faster. Note that its Recall is lower than general-purpose agents — a deliberate trade-off favoring precision over noise.
+필수 도구: **Git 2.41 이상**, **Go 1.25.5 이상**. 이 에디션은 소스 빌드를 지원합니다. 원본의 npm 패키지는 원본 제품을 설치하므로 이 에디션 설치 명령으로 사용하지 않습니다.
 
-A real-world code review benchmark built from **50** popular open-source repositories, **200** real Pull Requests, and **10** programming languages — cross-validated by 80+ senior engineers (**1,505** annotated ground-truth issues).
-
-<a href="https://huggingface.co/datasets/Alibaba-Aone/aacr-bench"><img src="https://huggingface.co/favicon.ico" alt="Hugging Face" width="20" height="20" /> Explore the AACR-Bench dataset on Hugging Face</a>.
-
-| Metric | What it measures | Why it matters |
-|--------|-----------------|----------------|
-| **F1** | Harmonic mean of precision and recall | Best single number for overall review quality |
-| **Precision** | Proportion of reported issues that are real defects | Higher = fewer false alarms to triage |
-| **Recall** | Proportion of real defects that are found | Higher = fewer issues slip through review |
-| **Avg Time** | Wall-clock time per review | Matters for CI pipeline latency |
-| **Avg Token** | Total tokens consumed per review | Directly impacts API cost |
-
-![Benchmark](imgs/benchmark-en.png)
-
-## Why Open Code Review?
-
-### The Problem with General-Purpose Agents
-
-If you've used general-purpose agents like Claude Code with Skills for code review, you've likely encountered these pain points:
-
-- **Incomplete coverage** — On larger changesets, agents tend to "cut corners," selectively reviewing only some files and missing others.
-- **Position drift** — Reported issues frequently don't match the actual code location, with line numbers or file references drifting off target.
-- **Unstable quality** — Natural-language-driven Skills are hard to debug, and review quality fluctuates significantly with minor prompt variations.
-
-The root cause: a purely language-driven architecture lacks hard constraints on the review process.
-
-### Core Design: Deterministic Engineering × Agent Hybrid
-
-Open Code Review's core philosophy is to combine deterministic engineering with an agent, each handling what it does best.
-
-**Deterministic Engineering — Hard Constraints**
-
-For review steps that *must not go wrong*, engineering logic — not the language model — guarantees correctness:
-
-- **Precise file selection** — Determines exactly which files need review and which should be filtered, ensuring no important change is missed.
-- **Smart file bundling** — Groups related files into a single review unit (e.g., `message_en.properties` and `message_zh.properties` are bundled together). Each bundle runs as a sub-agent with isolated context — a divide-and-conquer strategy that stays stable on very large changesets and naturally supports concurrent review.
-- **Fine-grained rule matching** — Matches review rules to each file's characteristics, keeping the model's attention sharply focused and eliminating information noise at the source. Compared to purely language-driven rule guidance, template-engine-based rule matching is more stable and predictable.
-- **External positioning and reflection modules** — Independent comment-positioning and comment-reflection modules systematically improve both the location accuracy and content accuracy of AI feedback.
-
-**Agent — Dynamic Decision-Making**
-
-The agent's strengths are concentrated where they matter most — dynamic decisions and dynamic context retrieval:
-
-- **Scenario-tuned prompts** — Prompt templates deeply optimized for code review, improving effectiveness while reducing token consumption.
-- **Scenario-tuned toolset** — Distilled from deep analysis of tool-call traces in large-scale production data — including call frequency distributions, per-tool repetition rates, and the impact of new tools on the overall call chain — resulting in a purpose-built toolset that is more stable and predictable for code review than a generic agent toolkit.
-
-## How to Use
-
-### Prerequisites
-
-- **Git >= 2.41** — Open Code Review relies on Git for diff generation, code search, and repository operations.
-
-### CLI
-
-#### Install
-
-```bash
-npm install -g @alibaba-group/open-code-review
+```sh
+git clone https://github.com/speddiikga-code/korean-llm-model-kbs.git
+cd korean-llm-model-kbs
 ```
 
-After installation, the `ocr` command is available globally.
+Windows PowerShell:
 
-For other installation methods (install script, GitHub Release binary, from source), see [Installation](https://open-codereview.ai/docs/installation).
-
-#### Quick Start
-
-**1. Configure LLM**
-
-You must configure an LLM before reviewing code, unless you use [Delegation Mode](https://open-codereview.ai/docs/delegate).
-
-```bash
-ocr config provider          # Select a built-in provider or add a custom one
-ocr config model             # Pick a model for the active provider
+```powershell
+go build -o ocr.exe ./cmd/opencodereview
+.\ocr.exe --version
+.\ocr.exe config provider
+.\ocr.exe config model
+.\ocr.exe config set language Korean
 ```
 
-![Provider setup](imgs/providers.jpg)
+macOS / Linux:
 
-The interactive UI guides you through provider selection, API key entry, and model configuration, then automatically tests connectivity.
+```sh
+go build -o ocr ./cmd/opencodereview
+./ocr --version
+./ocr config provider
+./ocr config model
+./ocr config set language Korean
+```
 
-For CLI setup, environment variables, custom providers, and other advanced configuration, see [Configuration](https://open-codereview.ai/docs/configuration).
+생성된 실행 파일을 PATH에 등록하면 어느 저장소에서든 `ocr`로 실행할 수 있습니다. 이미 다른 OCR 버전을 사용했다면 `ocr config set language Korean`으로 저장된 언어도 변경하세요.
 
-**2. Review**
+## 첫 리뷰
 
-```bash
-cd your-project
+검토할 Git 저장소로 이동한 뒤 실행합니다. PATH에 등록하지 않았다면 실행 파일의 전체 경로를 사용하세요.
 
-# Workspace mode — review all staged, unstaged, and untracked changes
+```sh
 ocr review
-
-# Branch range — reviews feature-branch's changes since it diverged from main (merge-base mode)
 ocr review --from main --to feature-branch
-
-# Single commit
-ocr review --commit abc123
-
-# Resume an interrupted range or commit review
-ocr session list
-ocr review --from main --to feature-branch --resume <session-id>
-
-# Full-file scan — review whole files instead of a diff (no git history needed)
-ocr scan                          # scan the entire repository
-ocr scan --path internal/agent    # scan a directory or specific files
-ocr scan --resume <session-id>   # resume an interrupted full-file scan
-
-# Save results to a file (recommended for AI host agents)
-ocr review --format json --output result.json
-
-# Delegation mode — let your AI coding agent perform the review itself
-# OCR handles file selection and rule resolution; no LLM configuration needed
-ocr delegate preview
-ocr delegate rule src/main.go src/handler.go
+ocr scan --path src
+ocr review --format json --output review.json
+ocr viewer
 ```
 
-## Documentation
+모델을 바꾸려면 `ocr config provider`와 `ocr config model`을 실행합니다. 한국어를 지원하는 OpenAI 호환 서버도 설정할 수 있습니다. 모델 이름은 실제 서버에서 제공하는 식별자를 사용하세요.
 
-Full documentation lives at **[open-codereview.ai/docs](https://open-codereview.ai/docs)**:
+```sh
+ocr config set provider custom
+ocr config set providers.custom.protocol openai
+ocr config set providers.custom.url http://localhost:8000/v1
+ocr config set model YOUR_MODEL_ID
+ocr llm test
+```
 
-- [Quickstart](https://open-codereview.ai/docs/quickstart) — install and run your first review
-- [Installation](https://open-codereview.ai/docs/installation) — all platforms and package managers
-- [CLI Reference](https://open-codereview.ai/docs/cli-reference) — every command and flag
-- [Review Rules](https://open-codereview.ai/docs/review-rules) — customize review rules with path filtering and targeting
-- [Configuration](https://open-codereview.ai/docs/configuration) — config keys and environment variables
-- [MCP Server](https://open-codereview.ai/docs/mcp) — extend the review agent with external tools
-- Coding Agent Integrations — choose the platform you use
-  - [Claude Code](plugins/open-code-review/README.md#claude-code) — install a plugin with review slash commands
-  - [Codex](plugins/open-code-review/README.md#codex) — install a plugin with callable review skills
-  - [Cursor](plugins/open-code-review/README.md#cursor) — install a plugin with portable review skills
-  - [OpenCode](plugins/open-code-review/opencode/README.md) — install native review tools and slash commands
-  - [QCA Forward](plugins/open-code-review/qca/README.md) — run delegation mode with the QCA host model and a ready-to-publish template
-  - [Skill-compatible agents](https://open-codereview.ai/docs/agent-skill) — install the portable agent skill
-- Review Execution Modes — after integration, choose which LLM performs the review
-  - [Default (OCR-managed)](https://open-codereview.ai/docs/configuration) — OCR runs the review using its configured LLM
-  - [Delegation Mode](https://open-codereview.ai/docs/delegate) — your coding agent runs the review using its own LLM; no OCR API key required
-- [CI/CD Integration](https://open-codereview.ai/docs/cicd) — GitHub Actions, GitLab CI, GitFlic CI, and Gerrit integration
-- [Session Viewer](https://open-codereview.ai/docs/viewer) — browse and replay review sessions in browser, mark comments as fixed or ignored and hide them while you work through the findings
-- [Telemetry](https://open-codereview.ai/docs/telemetry) — OpenTelemetry integration for observability
-- [FAQ](https://open-codereview.ai/docs/faq) — common questions and troubleshooting
+인증이 필요한 서버의 API 키는 대화형 설정으로 입력하세요. 키를 저장소에 커밋하지 마세요. 리뷰를 실행하면 선택한 모델 엔드포인트로 관련 소스 코드가 전송됩니다. 공개 웹사이트는 문서 사이트이며 API 키나 소스 코드를 입력받지 않습니다.
 
-## Contributing
+별도 OCR API 연결 없이 호스트 코딩 에이전트에 위임할 수도 있습니다:
 
-This project exists thanks to all the people who contribute. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding guidelines, and how to submit pull requests.
+```sh
+ocr delegate preview
+ocr delegate rule src/main.go
+```
 
-<a href="https://github.com/alibaba/open-code-review/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=alibaba/open-code-review" />
-</a>
+## 개발 및 검증
 
-## License
+```sh
+make check
+make test
+cd pages
+npm ci
+npm run typecheck
+npm test
+npm run build
+```
 
-[Apache-2.0](LICENSE) — Copyright 2026 Alibaba
+GitHub Actions는 Go 검증과 웹사이트 검증을 실행합니다. Pages 설정에서 **GitHub Actions**를 배포 소스로 선택하면 `main`의 변경 사항을 웹사이트에 배포합니다. 웹사이트는 정적 문서이며 실제 리뷰 엔진은 로컬 CLI에서 실행합니다.
+
+## 원본과 라이선스
+
+원본: [alibaba/open-code-review](https://github.com/alibaba/open-code-review). 저작권과 [Apache License 2.0](LICENSE)을 유지합니다. 변경 내역과 출처는 [NOTICE](NOTICE)에 기록되어 있습니다. 원본의 성능 평가나 사용자 규모는 이 파생 버전에 대한 별도 검증 결과가 아닙니다.
+
+한국어 에디션의 문서·기본값·배포 설정은 사용자의 요청에 따라 Codex의 도움으로 작성되었습니다.

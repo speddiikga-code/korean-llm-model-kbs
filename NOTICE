@@ -1,0 +1,14 @@
+korean llm model kbs
+
+This distribution is derived from Open Code Review.
+Original project: https://github.com/alibaba/open-code-review
+Copyright 2026 Alibaba and open-code-review Contributors.
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Korean edition modifications (2026): Korean default review language,
+Korean-first website and documentation, edition branding, and GitHub
+Pages/CI configuration for speddiikga-code/korean-llm-model-kbs.
+Modified files are recorded in the Git history of this repository.
+This independent derivative is not endorsed by Alibaba and does not
+include newly trained model weights. Original copyright and license
+notices are retained in source files.
